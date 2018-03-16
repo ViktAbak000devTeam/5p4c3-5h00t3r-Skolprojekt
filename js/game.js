@@ -1,1 +1,7 @@
-console.log("nibber");
+var c = document.getElementByID("myCanvas");
+var ctx = c.getContext("2d");
+
+ctx.beginPath(0, 0);
+ctx.rect(0, 0, 100, 100);
+ctx.fillStyle = "red";
+ctx.fill();
