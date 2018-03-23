@@ -1,0 +1,44 @@
+#hero {
+  background: #ff0000;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+}
+canvas {
+  border: 1px solid Anime;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(90deg, rgb(22, 22, 38), rgb(20, 17, 41), rgb(14, 19, 36));
+  background-size: 5000% 5000%;
+  animation: Anime 20s ease infinite;
+}
+
+@keyframes Anime {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 75% 0%;}
+  100% {background-position: 0% 50%;}
+}
+
+@font-face {
+  font-family: Arcade;
+  src: url();
+}
+/*div{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: ;
+  color: black;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 3em;
+  background-color: black;
+  padding: 1px;
+  background: linear-gradient(180deg, rgb(16, 205, 75), rgb(0, 236, 151));
+  background-size: 400% 400%;
+  animation: Anime 0.01s ease infinite;
+}*/
