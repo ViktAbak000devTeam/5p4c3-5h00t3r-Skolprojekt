@@ -45,7 +45,7 @@ function RandomfillStar(){
 
 var circleArray = [];
 
-for (var i = 0; i < 500; i++) {
+for (var i = 0; i < 200; i++) {
   var color = RandomfillStar();
   var radie = ((Math.random() * 2) + 0.5);
   var xC = Math.random() * (1.2*innerWidth);

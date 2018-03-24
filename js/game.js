@@ -11,7 +11,7 @@ var hero = new Object();
  hero.y = window.innerHeight/2 + 300;
  hero.w = 40;
  hero.h = 40;
- hero.movement = 5;
+ hero.movement = 10;
 
  var controller = new Object();
 
@@ -53,16 +53,27 @@ function handleControls() {
   if (controller.left) {
     hero.x -= hero.movement;
   }
+
+  ensureBounds(hero);
 }
 
-function ensureBounds() {
-  if (sprite.x < 40) {
-    sprite.x = 40;
+function ensureBounds(sprite) {
+  if (sprite.x < 20) {
+    sprite.x = 20;
+  }
+  if (sprite.y < 20) {
+    sprite.y = 20;
+  }
+  if (sprite.x + (20 + sprite.w) > window.innerWidth) {
+    sprite.x = window.innerWidth - (20 + sprite.w);
+  }
+  if (sprite.y + (20 + sprite.h) > window.innerHeight) {
+    sprite.y = window.innerHeight - (20 + sprite.h);
   }
 }
 
 function loop() {
-  if (new Date().getTime() - lastLoopRun > 5){ //Kollar hela tiden om differansen är större än 5ms
+  if (new Date().getTime() - lastLoopRun > 0.1){ //Kollar hela tiden om differansen är större än 5ms
     handleControls();
     showSprites();
     lastLoopRun = new Date().getTime(); //Uppdaterar hjältens position varje 5:e millisekund
