@@ -40,18 +40,18 @@ function RandomfillStar(){
   var o = Math.round,
     r = Math.random(),
     s = 255;
-  return 'rgba(' + o(r * s) + ',' + o(r * s) + ',' + o(r * s) + ',' + (r + 0.01).toFixed(1) + ')';
+  return 'rgba(' + o(r * s) + ',' + o(r * s) + ',' + o(r * s) + ',' + (r + 0.1).toFixed(1) + ')';
 }
 
 var circleArray = [];
 
-for (var i = 0; i < 200; i++) {
+for (var i = 0; i < 500; i++) {
   var color = RandomfillStar();
-  var radie = ((Math.random() * 2) + 1);
+  var radie = ((Math.random() * 2) + 0.5);
   var xC = Math.random() * (1.2*innerWidth);
   var yC = Math.random() * (1.2*innerHeight);
-  var dxC = (Math.random() - 0.5) * 0.2;
-  var dyC = (Math.random() - 0.5) * 0.1;
+  var dxC = (Math.random() * 0.01);
+  var dyC = (Math.random() - 0.5) * 0.05;
 
   circleArray.push(new Circle(xC, yC, dxC, dyC, radie, color));
 }
