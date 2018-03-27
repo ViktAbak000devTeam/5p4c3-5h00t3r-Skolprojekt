@@ -78,7 +78,7 @@ function loop() {
     showSprites();
     lastLoopRun = new Date().getTime(); //Uppdaterar hjältens position varje 5:e millisekund
   }
-  setTimeout('loop();', 2); //gör en liten fördröjning på 2ms
+  setTimeout('loop();', 2); //gör en liten fördröjning på 2ms, kör funktionen igen 
 }
 
 document.onkeydown = function(evt){
