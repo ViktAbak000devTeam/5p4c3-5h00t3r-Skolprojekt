@@ -68,7 +68,7 @@ function moveRelativeToRadius(r, dy) {
   }
 
 var starArray = [];
-for (var i = 0; i < 200; i++) {
+for (var i = 0; i < 50; i++) {
   var color = RandomfillStar();
   var radie = ((Math.random() * 2 ));
   var xC = Math.random() * (1.2*innerWidth);

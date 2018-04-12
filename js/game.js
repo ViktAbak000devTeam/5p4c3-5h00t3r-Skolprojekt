@@ -4,6 +4,15 @@ var RIGHT_KEY = 68;
 var DOWN_KEY = 83;
 
 var lastLoopRun = 0;
+var mouse = {
+  x: undefined,
+  y: undefined
+};
+
+window.addEventListener('mousemove', function(event){
+  mouse.x = event.x;
+  mouse.y = event.y;
+});
 
 var hero = new Object();
  hero.element = 'hero';
@@ -36,8 +45,8 @@ function showSprites() {
 
 function setPosition(sprite){
   var e = document.getElementById(sprite.element);
-  e.style.left = sprite.x + 'px';
-  e.style.top = sprite.y + 'px';
+  e.style.left = mouse.x - 20 + 'px';
+  e.style.top = mouse.y - 20 + 'px';
 }
 
 function handleControls() {
@@ -76,10 +85,11 @@ function loop() {
   //if (new Date().getTime() - lastLoopRun > 2){ //Kollar hela tiden om differansen är större än 5ms
     handleControls();
     showSprites();
+    console.log(mouse.x);
     //lastLoopRun = new Date().getTime(); //Uppdaterar hjältens position varje 5:e millisekund
   //}
   //setTimeout('loop();', 1); //gör en liten fördröjning på 2ms, kör funktionen igen
-  window.requestAnimationFrame(loop);
+  window.requestAnimationFrame(loop, handleControls, showSprites);
 }
 
 document.onkeydown = function(evt){
