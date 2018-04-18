@@ -1,15 +1,21 @@
-var canvas = document.querySelector('canvas');
+//var canvas = document.querySelector('canvas');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-var c = canvas.getContext('2d');
+//var c = canvas.getContext('2d');
 
 var starColors = [
   'rgb(255, 214, 0)',
   'rgb(0, 255, 181)',
   'rgb(0, 79, 255)'
 ];
+
+window.addEventListener('resize', function(){
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});//Denna resizar canvasen efter rutans storlek
 
 function Stars(x, y, dx, dy, radie, color, glow) {
   this.x = x;
@@ -80,13 +86,9 @@ for (var i = 0; i < 50; i++) {
   starArray.push(new Stars(xC, yC, dxC, dyC, radie, color, glow));
 }
 
-function animate() {
-  requestAnimationFrame(animate);
+function drawBackground() {
   c.clearRect(0, 0, innerWidth, innerHeight);
-
   for (var i = 0; i < starArray.length; i++) {
     starArray[i].update();
   }
 }
-
-animate();

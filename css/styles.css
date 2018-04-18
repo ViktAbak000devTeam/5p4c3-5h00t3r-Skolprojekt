@@ -4,6 +4,8 @@
   height: 40px;
   position: absolute;
 }
+
+
 canvas {
   border: 1px solid Anime;
 }
@@ -13,6 +15,8 @@ body {
   background: linear-gradient(90deg, rgb(22, 22, 38), rgb(20, 17, 41), rgb(14, 19, 36));
   background-size: 5000% 5000%;
   animation: Anime 20s ease infinite;
+  overflow: hidden;
+  cursor: none;
 }
 
 @keyframes Anime {
@@ -25,6 +29,14 @@ body {
   font-family: Arcade;
   src: url();
 }
+img {
+  display: none;
+}
+
+audio {
+  display: none;
+}
+
 /*div{
   position: absolute;
   left: 50%;
