@@ -7,19 +7,16 @@ function Fiender(x, y, dx, dy){
   this.dx = dx;
   this.dy = dy;
   this.radius = 60;
-  var maxHP = 100;
-  this.HP = maxHP;
+  this.maxHP = 100;
+  this.HP = this.maxHP;
   this.erik = document.getElementById("Erik");
   this.draw = function(){
     c.drawImage(this.erik,this.x-50, this.y-50, 100, 100);
-    c.fillStyle = "red";
-    c.fillRect(this.x-50, this.y-65, 100, 10);
-    c.fillStyle = "green";
-    c.fillRect(this.x-50, this.y-65, 100*this.HP/maxHP, 10);
+    drawHealthBars(this.x-50, this.y-65, 100, 10, this.HP/this.maxHP);
   }
   this.update = function(){
     this.y += this.dy;
-    if(this.y > canvas.height || this.HP <= 0){
+    if(this.y - 75 > canvas.height || this.HP <= 0){
       Monster.splice(Monster.indexOf(this), 1);
       Sprites.splice(Sprites.indexOf(this), 1);
     }
@@ -59,6 +56,9 @@ function Skott(x,y,dx,dy) {
       if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < Monster[i].radius){
         Monster[i].applyDamage(25);
         Sprites.splice(Sprites.indexOf(this), 1);
+        if(Monster[i].HP <= 0){
+          score += 100;
+        }
       }
     }
     // Tar bort skott utanfor skarmen
@@ -68,4 +68,14 @@ function Skott(x,y,dx,dy) {
     }
     this.draw();//anropar draw
   }
+}
+
+function drawHealthBars(x, y, width, height, fraction, opacity) {
+  if(opacity == undefined) opacity = 1;
+  c.fillStyle = "red";
+  c.globalAlpha = opacity;
+  c.fillRect(x + width*fraction, y, width - width*fraction, height);
+  c.fillStyle = "green";
+  c.fillRect(x, y, width*fraction, height);
+  c.globalAlpha = 1;
 }

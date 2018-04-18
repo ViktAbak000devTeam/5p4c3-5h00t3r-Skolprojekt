@@ -29,7 +29,8 @@ function loop(t) {
   drawBackground();
   updateObjects(dt);
   t0 = t;
-  console.log(mouse.x)
+  score++;
+  drawUI();
   window.requestAnimationFrame(loop);
 }
 
