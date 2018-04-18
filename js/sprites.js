@@ -16,9 +16,14 @@ function Fiender(x, y, dx, dy){
   }
   this.update = function(){
     this.y += this.dy;
-    if(this.y - 75 > canvas.height || this.HP <= 0){
+    if(this.y - 75 > canvas.height){
       Monster.splice(Monster.indexOf(this), 1);
       Sprites.splice(Sprites.indexOf(this), 1);
+    }
+    else if(this.HP <= 0){
+      Monster.splice(Monster.indexOf(this), 1);
+      Sprites.splice(Sprites.indexOf(this), 1);
+      hero.deathsound.play();
     }
     this.draw();
   }

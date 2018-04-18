@@ -36,7 +36,12 @@ function loop(t) {
 
 function init(){
   hero.LaserSoundEffect = document.getElementById("LaserSound");
+  hero.LaserSoundEffect.volume = 0.7;
   hero.crosshair = document.getElementById("crosshair");
+  hero.deathsound = document.getElementById("DeathSound");
+  var music = document.getElementById("BackgroundMusic");
+  music.volume = 0.6;
+  music.play();
   Sprites.push(hero);
   mouse.x = canvas.width/2;
   mouse.y = canvas.height/3;

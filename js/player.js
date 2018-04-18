@@ -5,11 +5,12 @@ hero.x = window.innerWidth/2;
 hero.y = window.innerHeight/2;
 hero.w = 100;
 hero.h = 100;
-hero.movement = 300;
+hero.movement = 500;
 hero.angle = 0;
 hero.img = document.getElementById("ship");
 hero.crosshair = undefined;
 hero.LaserSoundEffect = undefined;//skapar ett crosshair som foljer mouse position
+hero.deathsound = undefined;
 hero.cooldown = 0; //detta e en cooldown till skott/minut, 0 => farkosten kan skjuta
 hero.maxHP = 100;
 hero.HP = hero.maxHP;
