@@ -5,6 +5,7 @@ hero.x = window.innerWidth/2;
 hero.y = window.innerHeight/2;
 hero.w = 100;
 hero.h = 100;
+hero.radius = 50;
 hero.movement = 500;
 hero.angle = 0;
 hero.img = document.getElementById("ship");
@@ -14,6 +15,7 @@ hero.deathsound = undefined;
 hero.cooldown = 0; //detta e en cooldown till skott/minut, 0 => farkosten kan skjuta
 hero.maxHP = 100;
 hero.HP = hero.maxHP;
+hero.score = 0;
 
 hero.draw = function() {
  c.translate(hero.x, hero.y);
@@ -41,8 +43,20 @@ hero.update = function(dt) {
  if(controller.space) {
    hero.fire();
  }
+ if(this.HP <= 0){
+   //pausa spelet
+   window.location.href = "http://www.6am-group.com/wp-content/uploads/2015/07/shaq-feat.jpg"
+ }
+ for(var i = Monster.length - 1; i >= 0; i--){
+   var DeltaHX = this.x - Monster[i].x;
+   var DeltaHY = this.y - Monster[i].y;
+   if(Math.sqrt(DeltaHX*DeltaHX + DeltaHY*DeltaHY) < Monster[i].radius + this.radius){
+     hero.takeDamage(15*dt);
+   }
+ }
+
  ensureBounds(hero);
- this.draw();
+ hero.score++;
 }
 
 hero.fire = function() {
@@ -56,8 +70,12 @@ hero.fire = function() {
  else {
    this.LaserSoundEffect.play();//DETTA SPELAR UPP LJUD TILL LASERORKESTRALEN
  }
- Sprites.push(new Skott(this.x+dx*this.h/2, this.y+dy*this.h/2, dx*v, dy*v));
- this.cooldown = 0.25; //when function is activated, cooldown is set to greater than 0 to cool down
+ Sprites.push(new this.Skott(this.x+dx*this.h/2, this.y+dy*this.h/2, dx*v, dy*v));
+ this.cooldown = 0.20; //when function is activated, cooldown is set to greater than 0 to cool down
+}
+
+hero.takeDamage = function(dmg){
+  hero.HP -= dmg;
 }
 // Lagger till hero i listan av sprites
 
@@ -73,5 +91,44 @@ function ensureBounds(sprite) {
   }
   if (sprite.y + sprite.h/2 > window.innerHeight) {
     sprite.y = window.innerHeight-sprite.h/2;
+  }
+}
+
+hero.Skott = function(x,y,dx,dy) {
+  this.x = x;
+  this.y = y;
+  this.dx = dx;
+  this.dy = dy;
+  this.angle = Math.atan2(-dy, -dx);
+  var img = document.getElementById("skott");
+  this.draw = function() {
+    c.translate(this.x, this.y);//flyttar skotten till this.x, this.y
+    c.rotate(this.angle - Math.PI/2);//roterar skottet efter musens position
+    c.drawImage(img,-30,-30,60,60);
+    c.rotate(-this.angle + Math.PI/2);//tillater att skottet roterar at andra hallet
+    c.translate(-this.x, -this.y);//tillater en tillbakaflyttning
+  }
+
+  this.update = function(dt) {
+    this.x += this.dx*dt;
+    this.y += this.dy*dt;
+    // Testa kollision
+    for(var i = Monster.length -1; i >= 0; i--){
+      var DeltaX = this.x - Monster[i].x;
+      var DeltaY = this.y - Monster[i].y;
+      if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < Monster[i].radius){
+        Monster[i].applyDamage(25);
+        Sprites.splice(Sprites.indexOf(this), 1);
+        if(Monster[i].HP <= 0){
+          hero.score += 100;
+        }
+      }
+    }
+    // Tar bort skott utanfor skarmen
+    if(this.x < 0 || this.x > window.innerWidth
+    || this.y < 0 || this.y > window.innerHeight) {
+      Sprites.splice(Sprites.indexOf(this), 1);//splicar ut elementet ur arrayen
+    }
+    //anropar draw
   }
 }

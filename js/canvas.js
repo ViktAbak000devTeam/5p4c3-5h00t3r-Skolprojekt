@@ -50,8 +50,6 @@ function Stars(x, y, dx, dy, radie, color, glow) {
     }
     this.x += this.dx;
     this.y += this.dy;
-
-    this.draw();
   }
 }
 
@@ -89,9 +87,14 @@ for (var i = 0; i < 50; i++) {
   starArray.push(new Stars(xC, yC, dxC, dyC, radie, color, glow));
 }
 
-function drawBackground() {
-  c.clearRect(0, 0, innerWidth, innerHeight);
+function updateBackground() {
   for (var i = 0; i < starArray.length; i++) {
     starArray[i].update();
+  }
+}
+function drawBackground(){
+  c.clearRect(0, 0, innerWidth, innerHeight);
+  for (var i = 0; i < starArray.length; i++) {
+    starArray[i].draw();
   }
 }

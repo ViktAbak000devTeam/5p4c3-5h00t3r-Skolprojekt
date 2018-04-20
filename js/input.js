@@ -3,6 +3,7 @@ var UP_KEY = 87;
 var RIGHT_KEY = 68;
 var DOWN_KEY = 83;
 var SPACE_KEY = 32;
+var ESCAPE_KEY = 27;
 
 var mouse = {
   x: undefined,
@@ -24,6 +25,7 @@ document.onkeyup = function(evt){
 }
 
 var controller = new Object();
+controller.paused = false;
 
 function togglekey(keyCode, isPressed) {
  if (keyCode == LEFT_KEY) {
@@ -40,5 +42,8 @@ function togglekey(keyCode, isPressed) {
  }
  if (keyCode == SPACE_KEY) {
    controller.space = isPressed;
+ }
+ if (keyCode == ESCAPE_KEY && isPressed == false){
+   controller.paused = !controller.paused;
  }
 }

@@ -3,8 +3,6 @@
 
 to do:
 
- - Fiender
- - Hitboxes
  - att crosshair highlightar vid en enemy
  - pimpa lite hit och dit och fixa roliga detaljer
  - upgrade drops?
