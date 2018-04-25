@@ -24,8 +24,14 @@ document.onkeyup = function(evt){
   togglekey(evt.keyCode, false);
 }
 
-var controller = new Object();
-controller.paused = false;
+var controller = {
+  left: false,
+  right: false,
+  up: false,
+  down: false,
+  paused: false,
+  fire: false
+};
 
 function togglekey(keyCode, isPressed) {
  if (keyCode == LEFT_KEY) {
@@ -45,5 +51,6 @@ function togglekey(keyCode, isPressed) {
  }
  if (keyCode == ESCAPE_KEY && isPressed == false){
    controller.paused = !controller.paused;
+   setPaused(controller.paused);
  }
 }

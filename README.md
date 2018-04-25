@@ -10,6 +10,12 @@ to do:
  - bossar?
  - score, health och upgrades?
  - till en startmeny
+ - fler attribut pa Fiender
+ - pausmeny
+ - Nar man dor kommer en knapp
+ - startmeny
+ - Scoresaver och highscore
+
 
 tips fran Valdemar:
 - Dela upp projekt i flera filer

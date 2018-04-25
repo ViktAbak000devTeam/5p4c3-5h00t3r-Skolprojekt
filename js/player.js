@@ -5,8 +5,10 @@ hero.x = window.innerWidth/2;
 hero.y = window.innerHeight/2;
 hero.w = 100;
 hero.h = 100;
+hero.dy = 0;
+hero.dx = 0;
 hero.radius = 50;
-hero.movement = 500;
+hero.movement = 1500;
 hero.angle = 0;
 hero.img = document.getElementById("ship");
 hero.crosshair = undefined;
@@ -25,27 +27,44 @@ hero.draw = function() {
  c.translate(-hero.x, -hero.y);
 }
 
+function clamp(min, max, value) {
+  if(value < min) return min;
+  if(value > max) return max;
+  return value;
+}
+
 hero.update = function(dt) {
  this.angle = Math.atan2(hero.y - mouse.y, hero.x - mouse.x);
  this.cooldown -= dt;
  if (controller.up) {
-   hero.y -= hero.movement*dt;
+   hero.dy -= hero.movement*dt;
  }
  if (controller.down) {
-   hero.y += hero.movement*dt;
+   hero.dy += hero.movement*dt;
  }
  if (controller.right) {
-   hero.x += hero.movement*dt;
+   hero.dx += hero.movement*dt;
  }
  if (controller.left) {
-   hero.x -= hero.movement*dt;
+   hero.dx -= hero.movement*dt;
  }
  if(controller.space) {
    hero.fire();
  }
+ if (controller.up == controller.down){
+   hero.dy -= hero.dy*dt*2;
+ }
+ if (controller.right == controller.left){
+   hero.dx -= hero.dx*dt*2;
+ }
+ hero.dy = clamp(-500, 500, hero.dy);
+ hero.dx = clamp(-500, 500, hero.dx);
+ hero.x += hero.dx*dt;
+ hero.y += hero.dy*dt;
  if(this.HP <= 0){
    //pausa spelet
-   window.location.href = "http://www.6am-group.com/wp-content/uploads/2015/07/shaq-feat.jpg"
+   window.location.href = "http://www.6am-group.com/wp-content/uploads/2015/07/shaq-feat.jpg";
+   controller.paused = true;
  }
  for(var i = Monster.length - 1; i >= 0; i--){
    var DeltaHX = this.x - Monster[i].x;
@@ -56,7 +75,6 @@ hero.update = function(dt) {
  }
 
  ensureBounds(hero);
- hero.score++;
 }
 
 hero.fire = function() {
@@ -82,15 +100,19 @@ hero.takeDamage = function(dmg){
 function ensureBounds(sprite) {
   if (sprite.x < hero.w/2) {
     sprite.x = sprite.w/2;
+    sprite.dx = 0;
   }
   if (sprite.y < hero.h/2) {
     sprite.y = sprite.h/2;
+    sprite.dy = 0;
   }
   if (sprite.x + sprite.w/2 > window.innerWidth) {
     sprite.x = window.innerWidth - sprite.w/2 ;
+    sprite.dx = 0;
   }
   if (sprite.y + sprite.h/2 > window.innerHeight) {
     sprite.y = window.innerHeight-sprite.h/2;
+    sprite.dy = 0;
   }
 }
 

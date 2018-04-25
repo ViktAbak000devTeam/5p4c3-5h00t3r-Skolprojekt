@@ -1,31 +1,76 @@
 
-
-var levels = {
-  10 : {
-    spawnRate: 4,
+var enemyTypes = [
+  {
+    maxHP: 50,
+    attackInterval: 0.8,
+    imageID: "Enemyship",
+    damage: 5,
+    level: 0
   },
-  50 : {
-    spawnRate: 2,
+  {
+    maxHP: 100,
+    attackInterval: 0.6,
+    imageID: "Enemyship2",
+    damage: 5,
+    level: 1
   },
-};
+  {
+    maxHP: 150,
+    attackInterval: 0.4,
+    imageID: "Enemyship3",
+    damage: 10,
+    level: 3
+  }
+];
 
-var EnemySpawnRate = 0;
-function updateObjects(dt) {
-  // Updaterar alla sprites
-  var x = Math.random()*canvas.width;
-  if(x < 50){
-    x = 50;
+var EnemySpawner = function() {
+  this.time = 0;
+  this.spawnRate = 4;
+  this.cooldown = 0;
+  this.score = 0;
+  this.level = 0;
+  this.enemies = [];
+  this.tick = function(dt) {
+    this.level = Math.floor(this.score/400);
+    this.spawnRate = 4*Math.pow(0.9,this.level);
+    for(var i = 0; i < enemyTypes.length; i++) {
+      if(enemyTypes[i].level <= this.level && !this.enemies.includes(i)) {
+        this.enemies.push(i);
+      }
+    }
+    if(this.cooldown <= 0) {
+      // spawn new enemy
+      this.spawnEnemy();
+      this.cooldown = this.spawnRate;
+    }
+    else {
+      this.cooldown -= dt;
+    }
   }
-  else if( x > canvas.width-50){
-    x = canvas.width - 50;
-  }
-  if(EnemySpawnRate <= 0){
-    var Fiende = new Fiender(x, -100, 10, 1);
+  this.spawnEnemy = function() {
+    var i = Math.floor(Math.random()*this.enemies.length);
+
+    var x = Math.random()*canvas.width;
+    if(x < 50){
+      x = 50;
+    }
+    else if( x > canvas.width-50){
+      x = canvas.width - 50;
+    }
+    var Fiende = new Fiender(x, -100, enemyTypes[i], 10, 1);
     Sprites.push(Fiende);
     Monster.push(Fiende);
-    EnemySpawnRate = 4;
   }
-  EnemySpawnRate -= dt;
+}
+
+var EnemySpawnRate = 0;
+var spawner = new EnemySpawner();
+
+function updateObjects(dt) {
+  // Updaterar alla sprites
+  spawner.score = hero.score;
+  spawner.tick(dt);
+
   for(i = Sprites.length - 1; i >= 0; i--) {
     Sprites[i].update(dt);
   }
@@ -39,9 +84,6 @@ function drawSprites() {
   }
 }
 
-
-
-
 var music;
 var pausemusic;
 function init(){
@@ -52,31 +94,42 @@ function init(){
   hero.deathsound = document.getElementById("DeathSound");
   music = document.getElementById("BackgroundMusic");
   pausemusic = document.getElementById("PauseMusic");
-  music.play();
-  pausemusic.play();
   Sprites.push(hero);
   mouse.x = canvas.width/2;
   mouse.y = canvas.height/3;
+  setPaused(false);
   window.requestAnimationFrame(loop);
+}
+
+function setPaused(v) {
+  if(v) {
+    music.pause();
+    pausemusic.play();
+    pausemusic.volume = 0.0;
+    document.body.className = "paused";
+  }
+  else {
+    music.play();
+    music.volume = 0.5;
+    pausemusic.pause();
+    document.body.className = "";
+  }
 }
 
 var t0 = 0;
 var time = 0;
+var scoreCooldown = 0;
 function loop(t) {
   var dt = (t - t0)/1000;
   time += dt;
   if(!controller.paused) {
     updateBackground();
     updateObjects(dt);
-    hero.score += 1;
-    music.play();
-    music.volume = 0.5;
-    pausemusic.pause();
-  }
-  else{
-    music.pause();
-    pausemusic.play();
-    pausemusic.volume = 0;
+    scoreCooldown -= dt;
+    if(scoreCooldown <= 0) {
+      hero.score += 1;
+      scoreCooldown = 0.3;
+    }
   }
   drawBackground();
   drawSprites();

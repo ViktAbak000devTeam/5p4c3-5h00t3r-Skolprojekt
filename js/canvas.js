@@ -92,9 +92,20 @@ function updateBackground() {
     starArray[i].update();
   }
 }
+
 function drawBackground(){
   c.clearRect(0, 0, innerWidth, innerHeight);
   for (var i = 0; i < starArray.length; i++) {
     starArray[i].draw();
   }
+}
+
+function drawHealthBars(x, y, width, height, fraction, opacity) {
+  if(opacity == undefined) opacity = 1;
+  c.fillStyle = "red";
+  c.globalAlpha = opacity;
+  c.fillRect(x + width*fraction, y, width - width*fraction, height);
+  c.fillStyle = "green";
+  c.fillRect(x, y, width*fraction, height);
+  c.globalAlpha = 1;
 }

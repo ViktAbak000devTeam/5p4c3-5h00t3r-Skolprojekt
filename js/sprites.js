@@ -8,24 +8,25 @@ var EnemySprites = [
 
 var EnemyLaserBeamsSoundEffect = undefined;
 
-function Fiender(x, y, dx, dy) {
+function Fiender(x, y, type, dx, dy) {
   this.x = x;
   this.y = y;
   this.dx = dx;
   this.dy = dy;
-  this.maxHP = 100;
-  this.HP = this.maxHP;
+  this.type = type;
+  this.HP = this.type.maxHP;
   this.cooldown = 0;
   this.angle = 0;
-  this.sprite = Math.floor(Math.random()*EnemySprites.length);
-  this.radius = EnemySprites[this.sprite].width/9;
+  //this.sprite = Math.floor(Math.random()*EnemySprites.length);
+  var img = document.getElementById(this.type.imageID);
+  this.radius = img.width/9;
   this.draw = function(){
-    c.drawImage(EnemySprites[this.sprite],
-      this.x-EnemySprites[this.sprite].width/8,
-      this.y-EnemySprites[this.sprite].height/8,
-      EnemySprites[this.sprite].width/4,
-      EnemySprites[this.sprite].height/4);
-    drawHealthBars(this.x-50, this.y-65, 100, 10, this.HP/this.maxHP);
+    c.drawImage(img,
+      this.x-img.width/8,
+      this.y-img.height/8,
+      img.width/4,
+      img.height/4);
+    drawHealthBars(this.x-50, this.y-65, 100, 10, this.HP/this.type.maxHP);
   }
   this.update = function(dt){
     this.y += this.dy;
@@ -51,16 +52,17 @@ function Fiender(x, y, dx, dy) {
     console.log(this.x);
     var dx = -Math.cos(this.angle);
     var dy = -Math.sin(this.angle);
-    Sprites.push(new this.Skott(this.x+dx*this.radius, this.y+dy*this.radius, dx*v, dy*v));
-    this.cooldown = 0.85; //when function is activated, cooldown is set to greater than 0 to cool down
+    Sprites.push(new this.Skott(this.x+dx*this.radius, this.y+dy*this.radius, dx*v, dy*v, this.type.damage));
+    this.cooldown = this.type.attackInterval; //when function is activated, cooldown is set to greater than 0 to cool down
    }
 
    // Fiendens skott
-   this.Skott = function(x,y,dx,dy) {
+   this.Skott = function(x,y,dx,dy,damage) {
      this.x = x;
      this.y = y;
      this.dx = dx;
      this.dy = dy;
+     this.damage = damage;
      this.angle = Math.atan2(-dy, -dx);
      var img = document.getElementById("fiendeskott");
      this.draw = function() {
@@ -78,7 +80,7 @@ function Fiender(x, y, dx, dy) {
        var DeltaX = this.x - hero.x;
        var DeltaY = this.y - hero.y;
        if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < hero.radius){
-           hero.takeDamage(5);
+           hero.takeDamage(this.damage);
            Sprites.splice(Sprites.indexOf(this), 1);
        }
        // Tar bort skott utanfor skarmen
@@ -93,13 +95,3 @@ function Fiender(x, y, dx, dy) {
 /*
  *
  */
-
-function drawHealthBars(x, y, width, height, fraction, opacity) {
-  if(opacity == undefined) opacity = 1;
-  c.fillStyle = "red";
-  c.globalAlpha = opacity;
-  c.fillRect(x + width*fraction, y, width - width*fraction, height);
-  c.fillStyle = "green";
-  c.fillRect(x, y, width*fraction, height);
-  c.globalAlpha = 1;
-}

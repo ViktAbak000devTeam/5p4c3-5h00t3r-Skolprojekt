@@ -13,6 +13,10 @@ body {
   cursor: none;
 }
 
+body.paused {
+  cursor: default;
+}
+
 @keyframes Anime {
   0% {background-position: 0% 50%;}
   50% {background-position: 75% 0%;}
@@ -31,7 +35,7 @@ audio {
   display: none;
 }
 
-#Paused{
+#pauseMenu {
   position: absolute;
   text-align: center;
   top: 50%;
@@ -40,7 +44,11 @@ audio {
   font-family: 'Press Start 2P', cursive;
   color: rgb(255, 184, 0);
   font-size: 50px;
+  display: none;
+}
 
+body.paused #pauseMenu {
+  display: inline-block;
 }
 
 /*div{
