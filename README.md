@@ -15,6 +15,10 @@ to do:
  - Nar man dor kommer en knapp
  - startmeny
  - Scoresaver och highscore
+ - olika skottsprites for olika Fiender
+ - battre hitboxes
+ - ljudeffekt for fiendeskott
+ - bossmusik
 
 
 tips fran Valdemar:

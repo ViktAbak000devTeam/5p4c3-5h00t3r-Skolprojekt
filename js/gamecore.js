@@ -23,12 +23,15 @@ var enemyTypes = [
   }
 ];
 
+var boss = undefined;
+
 var EnemySpawner = function() {
   this.time = 0;
   this.spawnRate = 4;
   this.cooldown = 0;
   this.score = 0;
   this.level = 0;
+  this.biss = false;
   this.enemies = [];
   this.tick = function(dt) {
     this.level = Math.floor(this.score/400);
@@ -38,7 +41,19 @@ var EnemySpawner = function() {
         this.enemies.push(i);
       }
     }
-    if(this.cooldown <= 0) {
+    if(this.level == 3 && !this.biss) {
+      this.biss = true;
+      boss = new Thonfors(canvas.width/2, canvas.height/2, 0, 0);
+      Sprites.push(boss);
+    }
+    if(this.biss && boss.HP <= 0) {
+      this.biss = false;
+      boss = undefined;
+    }
+    if(this.biss) {
+      return;
+    }
+    else if(this.cooldown <= 0) {
       // spawn new enemy
       this.spawnEnemy();
       this.cooldown = this.spawnRate;
@@ -57,7 +72,7 @@ var EnemySpawner = function() {
     else if( x > canvas.width-50){
       x = canvas.width - 50;
     }
-    var Fiende = new Fiender(x, -100, enemyTypes[i], 10, 1);
+    var Fiende = new Fiender(x, -100, enemyTypes[i], 10, 70);
     Sprites.push(Fiende);
     Monster.push(Fiende);
   }

@@ -4,7 +4,7 @@ var EnemySprites = [
   document.getElementById("Enemyship"),
   document.getElementById("Enemyship2"),
   document.getElementById("Enemyship3")
-]
+];
 
 var EnemyLaserBeamsSoundEffect = undefined;
 
@@ -22,14 +22,14 @@ function Fiender(x, y, type, dx, dy) {
   this.radius = img.width/9;
   this.draw = function(){
     c.drawImage(img,
-      this.x-img.width/8,
-      this.y-img.height/8,
+      Math.floor(this.x-img.width/8),
+      Math.floor(this.y-img.height/8),
       img.width/4,
       img.height/4);
     drawHealthBars(this.x-50, this.y-65, 100, 10, this.HP/this.type.maxHP);
   }
   this.update = function(dt){
-    this.y += this.dy;
+    this.y += this.dy*dt;
     this.angle = Math.atan2(this.y - hero.y, this.x - hero.x);
     if(this.y - 75 > canvas.height){
       Monster.splice(Monster.indexOf(this), 1);
@@ -95,3 +95,42 @@ function Fiender(x, y, type, dx, dy) {
 /*
  *
  */
+function Thonfors(x, y, dx, dy){
+  this.x = x;
+  this.y = y;
+  this.dx = dx;
+  this.dy = dy;
+  this.maxHP = 500;
+  this.radius = 100;
+  this.score = 1000;
+  this.HP = this.maxHP;
+  var img = document.getElementById("Thonfors");//loada Bilder
+  this.draw = function(){
+    c.drawImage(img,
+      Math.floor(this.x-this.radius),
+      Math.floor(this.y-this.radius),
+      2*this.radius,
+      2*this.radius);
+      c.fillStyle = "red";
+      c.globalAlpha = 1 - (this.HP/this.maxHP);
+      c.fillRect(
+        Math.floor(this.x-this.radius),
+        Math.floor(this.y-this.radius),
+        2*this.radius,
+        2*this.radius);
+      c.globalAlpha = 1;
+    drawHealthBars(this.x-50, this.y-this.radius - 15, 100, 10, this.HP/this.maxHP);
+  }
+  this.update = function(dt){
+    this.x += this.dx*dt;
+    this.y += this.dy*dt;
+
+    if(this.HP <= 0){
+      Sprites.splice(Sprites.indexOf(this), 1);
+      hero.deathsound.play();
+    }
+  }
+  this.applyDamage = function(dmg){
+    this.HP -= dmg;
+  }
+}
