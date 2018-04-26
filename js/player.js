@@ -62,6 +62,7 @@ hero.update = function(dt) {
   hero.y += hero.dy * dt;
   if (this.HP <= 0) {
     //pausa spelet
+    hero.deathsound.play();
     window.location.href = "http://www.6am-group.com/wp-content/uploads/2015/07/shaq-feat.jpg";
     controller.paused = true;
   }
@@ -87,10 +88,10 @@ hero.fire = function() {
   var v = 1000;
   var dx = -Math.cos(this.angle);
   var dy = -Math.sin(this.angle);
-  if (!this.LaserSoundEffect.paused) {
-    this.LaserSoundEffect.currentTime = 0;
+  if (!LaserSoundEffect.paused) {
+    LaserSoundEffect.currentTime = 0;
   } else {
-    this.LaserSoundEffect.play(); //DETTA SPELAR UPP LJUD TILL LASERORKESTRALEN
+    LaserSoundEffect.play(); //DETTA SPELAR UPP LJUD TILL LASERORKESTRALEN
   }
   Sprites.push(new this.Skott(this.x + dx * this.h / 2, this.y + dy * this.h / 2, dx * v, dy * v));
   this.cooldown = 0.25; //when function is activated, cooldown is set to greater than 0 to cool down
