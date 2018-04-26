@@ -122,15 +122,30 @@ function Thonfors(x, y, dx, dy){
     drawHealthBars(this.x-50, this.y-this.radius - 15, 100, 10, this.HP/this.maxHP);
   }
   this.update = function(dt){
-    this.x += this.dx*dt;
-    this.y += this.dy*dt;
 
     if(this.HP <= 0){
       Sprites.splice(Sprites.indexOf(this), 1);
       hero.deathsound.play();
     }
-  }
-  this.applyDamage = function(dmg){
-    this.HP -= dmg;
+
+    if(this.y - this.radius > 0){
+      this.x += this.dx*dt;
+      this.y += this.dy*dt;
+
+        if(this.x+this.radius >= canvas.width || this.x-this.radius <= 0){
+          this.dx = -this.dx;
+        }
+        if(this.y+this.radius >= canvas.height || this.y-this.radius<= 0){
+          this.dy = -this.dy;
+        }
+      }
+      else{
+      this.x += this.dx*dt;
+      this.y += this.dy*dt;
+      }
+    }
+    this.draw();
+    this.applyDamage = function(dmg){
+      this.HP -= dmg;
   }
 }

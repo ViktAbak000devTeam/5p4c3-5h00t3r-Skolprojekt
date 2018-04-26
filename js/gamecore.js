@@ -12,14 +12,14 @@ var enemyTypes = [
     attackInterval: 0.6,
     imageID: "Enemyship2",
     damage: 5,
-    level: 1
+    level: 2
   },
   {
     maxHP: 150,
     attackInterval: 0.4,
     imageID: "Enemyship3",
     damage: 10,
-    level: 3
+    level: 5
   }
 ];
 
@@ -41,9 +41,11 @@ var EnemySpawner = function() {
         this.enemies.push(i);
       }
     }
-    if(this.level == 3 && !this.biss) {
+    var x = Math.random()*canvas.width;
+    var y = Math.random()*canvas.height;
+    if(this.level == 4 && !this.biss) {
       this.biss = true;
-      boss = new Thonfors(canvas.width/2, canvas.height/2, 0, 0);
+      boss = new Thonfors(x, -100, 30, 50);
       Sprites.push(boss);
     }
     if(this.biss && boss.HP <= 0) {
