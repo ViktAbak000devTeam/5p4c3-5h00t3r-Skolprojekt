@@ -42,11 +42,11 @@ function togglekey(keyCode, isPressed, ishold) {
   }
   if (keyCode == UP_KEY) {
     controller.up = isPressed;
-    updateSpeed(2, 30, controller.up);
+    updateSpeed(2, 30, 0, controller.up);
   }
   if (keyCode == DOWN_KEY) {
     controller.down = isPressed;
-    updateSpeed(0.5, 0, controller.up);
+    updateSpeed(0.5, 30, 0, controller.up);
   }
   if (keyCode == SPACE_KEY) {
     controller.space = isPressed;

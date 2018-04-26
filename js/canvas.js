@@ -41,13 +41,19 @@ function Stars(x, y, dx, dy, radie, color, glow) {
     c.fill();
   }
 
-  this.changeSpeed = function(faktor, limit, action) {
+  this.changeSpeed = function(faktor, limit, minlimit, action) {
 
       if (this.dy > limit) {
         faktor = 1;
-    }
+      }
+      else if(this.dy < minlimit){
+        faktor = 1;
+      }
     this.dy = (this.dy * faktor);
-    //this.dy = this.dySave;
+    if(action == false){
+      this.dy = this.dySave;
+
+    }
 }
 
   this.update = function() {
@@ -63,12 +69,13 @@ function Stars(x, y, dx, dy, radie, color, glow) {
   }
 }
 
-function updateSpeed(faktor, limit, action) {
+function updateSpeed(faktor, limit, minlimit, action) {
   this.faktor = faktor;
   this.limit = limit;
+  this.minlimit = minlimit;
   this.action = action;
   for (var i = 0; i < starArray.length; i++) {
-    starArray[i].changeSpeed(this.faktor, this.limit, this.action);
+    starArray[i].changeSpeed(this.faktor, this.limit, this.minlimit, this.action);
   }
 }
 
