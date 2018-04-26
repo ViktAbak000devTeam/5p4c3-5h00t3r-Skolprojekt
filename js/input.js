@@ -46,7 +46,7 @@ function togglekey(keyCode, isPressed, ishold) {
   }
   if (keyCode == DOWN_KEY) {
     controller.down = isPressed;
-    updateSpeed(0.5, 30, 0, controller.up);
+    updateSpeed(0.5, 30, 10, controller.down);
   }
   if (keyCode == SPACE_KEY) {
     controller.space = isPressed;
