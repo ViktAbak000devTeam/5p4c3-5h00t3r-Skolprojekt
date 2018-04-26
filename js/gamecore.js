@@ -1,4 +1,6 @@
 
+
+
 var enemyTypes = [
   {
     maxHP: 50,
@@ -23,6 +25,8 @@ var enemyTypes = [
   }
 ];
 
+
+
 var boss = undefined;
 
 var EnemySpawner = function() {
@@ -45,11 +49,15 @@ var EnemySpawner = function() {
     var y = Math.random()*canvas.height;
     if(this.level == 4 && !this.biss) {
       this.biss = true;
+      music.pause();
+      bossmusic1.play();
       boss = new Thonfors(x, -100, 30, 50);
       Sprites.push(boss);
     }
     if(this.biss && boss.HP <= 0) {
       this.biss = false;
+      bossmusic1.pause();
+      music.play();
       boss = undefined;
     }
     if(this.biss) {
@@ -101,16 +109,10 @@ function drawSprites() {
   }
 }
 
-var music;
-var pausemusic;
 function init(){
-  hero.LaserSoundEffect = document.getElementById("LaserSound");
-  hero.LaserSoundEffect.volume = 0.2;
-  EnemyLaserBeamsSoundEffect = document.getElementById("EnemyLaserSound");
-  hero.crosshair = document.getElementById("crosshair");
-  hero.deathsound = document.getElementById("DeathSound");
-  music = document.getElementById("BackgroundMusic");
-  pausemusic = document.getElementById("PauseMusic");
+  preload();
+  LaserSoundEffect.volume = 0.2;
+  bossmusic1.volume = 0.5;
   Sprites.push(hero);
   mouse.x = canvas.width/2;
   mouse.y = canvas.height/3;
@@ -122,14 +124,21 @@ function setPaused(v) {
   if(v) {
     music.pause();
     pausemusic.play();
+    bossmusic1.pause();
     pausemusic.volume = 0.0;
     document.body.className = "paused";
   }
   else {
-    music.play();
-    music.volume = 0.5;
-    pausemusic.pause();
-    document.body.className = "";
+    if(boss != undefined){
+      bossmusic1.play();
+      document.body.className = "";
+    }
+    else{
+      music.play();
+      music.volume = 0.5;
+      pausemusic.pause();
+      document.body.className = "";
+    }
   }
 }
 
