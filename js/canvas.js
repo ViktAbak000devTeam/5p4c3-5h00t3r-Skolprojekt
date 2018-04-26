@@ -41,7 +41,7 @@ function Stars(x, y, dx, dy, radie, color, glow) {
     c.fill();
   }
 
-  this.changeSpeed = function(faktor, limit, minlimit, action) {
+  /*this.changeSpeed = function(faktor, limit, minlimit, action) {
 
       if (this.dy > limit) {
         faktor = 1;
@@ -54,7 +54,7 @@ function Stars(x, y, dx, dy, radie, color, glow) {
       this.dy = this.dySave;
 
     }
-}
+}*/
 
   this.update = function() {
     if (this.x > innerWidth + 200 || this.x < -200) {
@@ -69,7 +69,7 @@ function Stars(x, y, dx, dy, radie, color, glow) {
   }
 }
 
-function updateSpeed(faktor, limit, minlimit, action) {
+/*function updateSpeed(faktor, limit, minlimit, action) {
   this.faktor = faktor;
   this.limit = limit;
   this.minlimit = minlimit;
@@ -77,7 +77,7 @@ function updateSpeed(faktor, limit, minlimit, action) {
   for (var i = 0; i < starArray.length; i++) {
     starArray[i].changeSpeed(this.faktor, this.limit, this.minlimit, this.action);
   }
-}
+}*/
 
 function RandomfillStar(){
   var o = Math.round,
