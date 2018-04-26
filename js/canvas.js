@@ -40,6 +40,13 @@ function Stars(x, y, dx, dy, radie, color, glow) {
     c.fill();
   }
 
+  this.changeSpeed = function(faktor, firstpress) {
+    if (firstpress == true) {
+      this.dy = (this.dy * faktor);
+    }
+      firstpress = false;
+}
+
   this.update = function() {
     if (this.x > innerWidth + 200 || this.x < -200) {
       this.dx = -this.dx;
@@ -61,16 +68,7 @@ function RandomfillStar(){
 }
 
 function moveRelativeToRadius(r, dy) {
-  /*if (r < 1) {
-      dy = dy*0.2;
-    }
-  else if(r >= 1 && r < 1.5 ){
-      dy = dy*0.5;
-  }
-  else if(r >= 1.5){
-      dy = dy*1.5;
-  }*/
-  dy = (r*dy)/1.5
+  dy = (r*dy)/1.5;
   return dy;
   }
 
@@ -85,6 +83,13 @@ for (var i = 0; i < 50; i++) {
   var glow = starColors[Math.floor(Math.random() * starColors.length)];
 
   starArray.push(new Stars(xC, yC, dxC, dyC, radie, color, glow));
+}
+
+function updateSpeed(faktor) {
+  this.faktor = faktor;
+  for (var i = 0; i < starArray.length; i++) {
+    starArray[i].changeSpeed(this.faktor, SPEED);
+  }
 }
 
 function updateBackground() {
