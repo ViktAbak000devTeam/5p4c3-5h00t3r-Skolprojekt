@@ -4,7 +4,6 @@ var RIGHT_KEY = 68;
 var DOWN_KEY = 83;
 var SPACE_KEY = 32;
 var ESCAPE_KEY = 27;
-var SPEED = false;
 
 var mouse = {
   x: undefined,
@@ -34,7 +33,7 @@ var controller = {
   fire: false
 };
 
-function togglekey(keyCode, isPressed) {
+function togglekey(keyCode, isPressed, ishold) {
   if (keyCode == LEFT_KEY) {
     controller.left = isPressed;
   }
@@ -43,13 +42,11 @@ function togglekey(keyCode, isPressed) {
   }
   if (keyCode == UP_KEY) {
     controller.up = isPressed;
-}
-  if (keyCode == UP_KEY && SPEED == false) {
-    updateSpeed(10, SPEED);
-    SPEED = true;
+    updateSpeed(2, 30, controller.up);
   }
   if (keyCode == DOWN_KEY) {
     controller.down = isPressed;
+    updateSpeed(0.5, 0, controller.up);
   }
   if (keyCode == SPACE_KEY) {
     controller.space = isPressed;
