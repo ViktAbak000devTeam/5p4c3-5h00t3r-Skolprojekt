@@ -17,11 +17,11 @@ window.addEventListener('mousemove', function(event) {
 
 
 document.onkeydown = function(evt) {
-  togglekey(evt.keyCode, true, false);
+  togglekey(evt.keyCode, true);
 }
 
 document.onkeyup = function(evt) {
-  togglekey(evt.keyCode, false, true);
+  togglekey(evt.keyCode, false);
 }
 
 var controller = {
@@ -49,7 +49,7 @@ function togglekey(keyCode, isPressed) {
   if (keyCode == SPACE_KEY) {
     controller.space = isPressed;
   }
-  if (keyCode == ESCAPE_KEY && isPressed == false) {
+  if (keyCode == ESCAPE_KEY && isPressed) {
     controller.paused = !controller.paused;
     setPaused(controller.paused);
   }

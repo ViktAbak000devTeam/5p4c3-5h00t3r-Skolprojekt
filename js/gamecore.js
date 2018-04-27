@@ -142,6 +142,20 @@ function setPaused(v) {
   }
 }
 
+function gameOver(v) {
+  if (v) {
+    ESCAPE_KEY = undefined;
+    Sprites.splice(0, Sprites.length);
+    controller.paused = true;
+    music.pause();
+    GameOver.volume = 0.8;
+    GameOver.play();
+    //End.volume = 0.35;
+    //End.play();
+    document.body.className = "paused";
+  }
+}
+
 var t0 = 0;
 var time = 0;
 var scoreCooldown = 0;
@@ -149,7 +163,7 @@ function loop(t) {
   var dt = (t - t0)/1000;
   time += dt;
   if(!controller.paused) {
-    updateBackground(1.051, 0.99, controller.up, controller.down);
+    updateBackground(1.01, 0.99, controller.up, controller.down);
     updateObjects(dt);
     scoreCooldown -= dt;
     if(scoreCooldown <= 0) {
@@ -157,6 +171,7 @@ function loop(t) {
       scoreCooldown = 0.3;
     }
   }
+
   drawBackground();
   drawSprites();
   t0 = t;

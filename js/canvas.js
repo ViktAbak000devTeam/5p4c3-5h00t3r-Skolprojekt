@@ -100,20 +100,9 @@ function RandomfillStar(){
 }
 
 function moveRelativeToRadius(r, dy) {
-  dy = dyCChecker(dy);
-  console.log(dy);
   dy = (r*dy)/1.5;
   return dy;
   }
-
-function dyCChecker(dy) {
-  var dyArray = dy.toString().split("");
-  if (dyArray[0] === 0) {
-    console.log(dyArray[0]);
-    dyArray = dyArray.slice(0, 1);
-  }
-  return dyArray.join("");
-}
 
 var starArray = [];
 for (var i = 0; i < 50; i++) {
@@ -124,7 +113,6 @@ for (var i = 0; i < 50; i++) {
   var dxC = (Math.random() * 0.01);
   var dyC = moveRelativeToRadius(radie, 15);
   var glow = starColors[Math.floor(Math.random() * starColors.length)];
-//console.log(dyC + "dyC");
   starArray.push(new Stars(xC, yC, dxC, dyC, radie, color, glow));
 }
 

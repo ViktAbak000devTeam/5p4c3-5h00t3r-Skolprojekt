@@ -61,11 +61,12 @@ hero.update = function(dt) {
   hero.x += hero.dx * dt;
   hero.y += hero.dy * dt;
   if (this.HP <= 0) {
-    //pausa spelet
-    hero.deathsound.play();
-    window.location.href = "http://www.6am-group.com/wp-content/uploads/2015/07/shaq-feat.jpg";
     controller.paused = true;
+    gameOver(true);
+    //window.location.href = "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/VGiBmTeaeilt7mgjb/game-over-retro-arcade-digital-blue-"
   }
+
+
   for (var i = Monster.length - 1; i >= 0; i--) {
     var DeltaHX = this.x - Monster[i].x;
     var DeltaHY = this.y - Monster[i].y;
