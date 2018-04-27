@@ -59,7 +59,7 @@ function Stars(x, y, dx, dy, radie, color, glow) {
       }
     }
     else if (controlDown == true){
-      if (this.dy >= this.dySave/2.7) {
+      if (this.dy >= this.dySave/1.7) {
       this.dy = this.dy*slowFactor;
       }
       else {
