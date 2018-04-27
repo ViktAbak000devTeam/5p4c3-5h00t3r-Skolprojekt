@@ -26,6 +26,7 @@ function Stars(x, y, dx, dy, radie, color, glow) {
   this.dx = dx;
   this.dy = dy;
   this.dySave = dy;
+  //this.dxSave = dx;
   this.radie = radie;
   this.color = color;
   this.glow = glow;
@@ -41,22 +42,7 @@ function Stars(x, y, dx, dy, radie, color, glow) {
     c.fill();
   }
 
-  this.changeSpeed = function(faktor, limit, minlimit, action) {
-
-      if (this.dy > limit) {
-        faktor = 1;
-      }
-      else if(this.dy < minlimit){
-        faktor = 1;
-      }
-    this.dy = (this.dy * faktor);
-    if(action == false){
-      this.dy = this.dySave;
-
-    }
-}
-
-  this.update = function() {
+  this.update = function(speedFactor, slowFactor, controlUp, controlDown) {
     if (this.x > innerWidth + 200 || this.x < -200) {
       this.dx = -this.dx;
     }
@@ -64,20 +50,47 @@ function Stars(x, y, dx, dy, radie, color, glow) {
       this.y = 0;
       this.x = Math.random() * (1.2*innerWidth);
     }
+    if (controlUp == true){
+      if (this.dy <= this.dySave*2.7) {
+      this.dy = this.dy*speedFactor;
+      }
+      else {
+      this.dy = this.dy*1;
+      }
+    }
+    else if (controlDown == true){
+      if (this.dy >= this.dySave/2.7) {
+      this.dy = this.dy*slowFactor;
+      }
+      else {
+      this.dy = this.dy*1;
+      }
+    }
+    /*else if (controlLeft == true) {
+      if (-this.dx <= -this.dxSave/2) {
+        this.dx = -this.dx*speedFactor*200;
+      }
+      else {
+        this.dx = this.dx*1;
+      }
+    }
+    else if (controlRight == true) {
+      if (this.dx <= this.dxSave/2) {
+        this.dx = this.dx*speedFactor*200;
+      }
+      else {
+        this.dx = this.dx*1;
+      }
+    }*/
+    else {
+      this.dy = this.dySave;
+      /*this.dx = this.dxSave;*/
+    }
     this.x += this.dx;
     this.y += this.dy;
   }
 }
 
-function updateSpeed(faktor, limit, minlimit, action) {
-  this.faktor = faktor;
-  this.limit = limit;
-  this.minlimit = minlimit;
-  this.action = action;
-  for (var i = 0; i < starArray.length; i++) {
-    starArray[i].changeSpeed(this.faktor, this.limit, this.minlimit, this.action);
-  }
-}
 
 function RandomfillStar(){
   var o = Math.round,
@@ -87,9 +100,20 @@ function RandomfillStar(){
 }
 
 function moveRelativeToRadius(r, dy) {
+  dy = dyCChecker(dy);
+  console.log(dy);
   dy = (r*dy)/1.5;
   return dy;
   }
+
+function dyCChecker(dy) {
+  var dyArray = dy.toString().split("");
+  if (dyArray[0] === 0) {
+    console.log(dyArray[0]);
+    dyArray = dyArray.slice(0, 1);
+  }
+  return dyArray.join("");
+}
 
 var starArray = [];
 for (var i = 0; i < 50; i++) {
@@ -100,13 +124,19 @@ for (var i = 0; i < 50; i++) {
   var dxC = (Math.random() * 0.01);
   var dyC = moveRelativeToRadius(radie, 15);
   var glow = starColors[Math.floor(Math.random() * starColors.length)];
-
+//console.log(dyC + "dyC");
   starArray.push(new Stars(xC, yC, dxC, dyC, radie, color, glow));
 }
 
-function updateBackground() {
+function updateBackground(speedFactor, slowFactor, controlUp, controlDown) {
+  this.speedFactor = speedFactor;
+  this.slowFactor = slowFactor;
+  this.controlUp = controlUp;
+  this.controlDown = controlDown;
+
+
   for (var i = 0; i < starArray.length; i++) {
-    starArray[i].update();
+    starArray[i].update(this.speedFactor, this.slowFactor, this.controlUp, this.controlDown);
   }
 }
 

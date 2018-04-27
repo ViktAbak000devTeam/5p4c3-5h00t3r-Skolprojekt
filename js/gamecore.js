@@ -149,7 +149,7 @@ function loop(t) {
   var dt = (t - t0)/1000;
   time += dt;
   if(!controller.paused) {
-    updateBackground();
+    updateBackground(1.051, 0.99, controller.up, controller.down);
     updateObjects(dt);
     scoreCooldown -= dt;
     if(scoreCooldown <= 0) {
