@@ -12,4 +12,22 @@ function preload(){
   music = document.getElementById("BackgroundMusic");
   pausemusic = document.getElementById("PauseMusic");
   bossmusic1 = document.getElementById("bossmusic1");
+  boom = document.getElementById("boom");
+  chrash3 = document.getElementById("chrash3");
+  turn = document.getElementById("turn");
+}
+
+var deadSoundArray = [
+  boom,
+  //LargeChrash
+  chrash3
+];
+
+function pickDeadSound() {
+  boom.volume = 0.5;
+  //(LargeChrash.volume = 0.3;
+  chrash3.voume = 0.3;
+
+  var selected = deadSoundArray[Math.floor(Math.random() * deadSoundArray.length)];
+  selected.play();
 }

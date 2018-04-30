@@ -19,6 +19,7 @@ to do:
  - battre hitboxes
  - ljudeffekt for fiendeskott
  - bossmusik
+ - lagg till sa att stjarnorna ror sig at sidan nar man trycker A eller D
 
 
 tips fran Valdemar:

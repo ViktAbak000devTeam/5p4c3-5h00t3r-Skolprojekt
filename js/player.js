@@ -60,8 +60,15 @@ hero.update = function(dt) {
   hero.dx = clamp(-500, 500, hero.dx);
   hero.x += hero.dx * dt;
   hero.y += hero.dy * dt;
+
+  if (this.HP <= hero.maxHP/15) {
+    turn.volume = 0.34;
+    turn.play();
+    if(!exploded) {
+      explosion(hero.x, hero.y);
+    }
+  }
   if (this.HP <= 0) {
-    controller.paused = true;
     gameOver(true);
     //window.location.href = "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/VGiBmTeaeilt7mgjb/game-over-retro-arcade-digital-blue-"
   }

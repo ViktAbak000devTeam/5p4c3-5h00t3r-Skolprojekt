@@ -1,18 +1,34 @@
-//var canvas = document.querySelector('canvas');
-
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-//var c = canvas.getContext('2d');
-
 var starColors = [
   'rgb(255, 214, 0)',
   'rgb(0, 255, 181)',
   'rgb(0, 79, 255)'
 ];
+
+var explosionColor1 = [
+  'rgba(225, 160, 0, 1)',
+  'rgba(240, 255, 0, 1)',
+  'rgba(225, 180, 0, 1)'
+];
+
+var explosionColor2 = [
+  'rgba(255, 101, 0, 1)',
+  'rgba(255, 130, 0, 1)',
+  'rgba(255, 140, 0, 1)'
+];
+
+var explosionColor3 = [
+  'rgba(246, 19, 0, 1)',
+  'rgba(255, 50, 0, 1)',
+  'rgba(255, 10, 0, 1)'
+];
+
+var exploded = false;
 
 window.addEventListener('resize', function(){
 
@@ -26,10 +42,13 @@ function Stars(x, y, dx, dy, radie, color, glow) {
   this.dx = dx;
   this.dy = dy;
   this.dySave = dy;
-  //this.dxSave = dx;
+  this.dxSave = dx;
   this.radie = radie;
   this.color = color;
   this.glow = glow;
+  this.historyX = [];
+  this.historyY = [];
+  this.minsk = 1;
 
   this.draw = function() {
     c.beginPath();
@@ -42,51 +61,77 @@ function Stars(x, y, dx, dy, radie, color, glow) {
     c.fill();
   }
 
-  this.update = function(speedFactor, slowFactor, controlUp, controlDown) {
-    if (this.x > innerWidth + 200 || this.x < -200) {
-      this.dx = -this.dx;
+  /*this.pushO = function(a) {
+  for (var i = 0; i < this.historyX.length; i++) {
+    a.push(new Stars(this.historyX[i], this.historyY[i], this.dx, this.dy, this.radie, this.color, this.glow));
+  }
+}*/
+
+this.moveRelativeToMass = function() {
+    this.dy = (this.dy/this.radie)*20;
+    this.dx = (this.dx/this.radie)*20;
+  }
+
+  this.fade = function() {
+    this.color = this.color.toString("");
+    var start = this.color.lastIndexOf(", ");
+    var end = this.color.lastIndexOf(")");
+    this.minsk = this.minsk * 0.94;
+    this.minsk = " " + this.minsk;
+    var aArray = this.color.split("");
+    aArray.splice(start, end - start, ",", " ", this.minsk);
+    this.color = aArray.join("");
+    this.minsk = parseFloat(this.minsk);
+
+    if(this.minsk < 0.01) {
+      explosionArray.splice(0, explosionArray.length);
+      exploded = false;
+    }
+  }
+
+  this.accelerate = function() {
+    this.dx = this.dx*0.9;
+    this.dy = this.dy*0.9;
+    this.x += this.dx + hero.dx/1000;
+    this.y += this.dy;
+
+    this.historyX.push(this.x);
+    this.historyY.push(this.y);
+
+    if (this.historyX.length > 20) {
+      this.historyX.splice(0, 1);
+      this.historyY.splice(0, 1);
+    }
+  }
+
+  this.update = function() {
+  if (this.x > innerWidth + 200 || this.x < -200) {
+      this.y = -200;
+      this.x = Math.random() * (1.2*innerWidth);
+      this.dx = this.dxSave;
     }
     if (this.y > innerHeight + 200) {
-      this.y = 0;
+      this.y = -200;
       this.x = Math.random() * (1.2*innerWidth);
     }
-    if (controlUp == true){
+    if (controller.up == true){
       if (this.dy <= this.dySave*2.7) {
-      this.dy = this.dy*speedFactor;
-      }
-      else {
-      this.dy = this.dy*1;
+      this.dy = this.dy*1.01;
       }
     }
-    else if (controlDown == true){
+    else if (controller.down == true){
       if (this.dy >= this.dySave/1.7) {
-      this.dy = this.dy*slowFactor;
-      }
-      else {
-      this.dy = this.dy*1;
+      this.dy = this.dy*0.99;
       }
     }
-    /*else if (controlLeft == true) {
-      if (-this.dx <= -this.dxSave/2) {
-        this.dx = -this.dx*speedFactor*200;
-      }
-      else {
-        this.dx = this.dx*1;
-      }
-    }
-    else if (controlRight == true) {
-      if (this.dx <= this.dxSave/2) {
-        this.dx = this.dx*speedFactor*200;
-      }
-      else {
-        this.dx = this.dx*1;
-      }
-    }*/
     else {
       this.dy = this.dySave;
-      /*this.dx = this.dxSave;*/
+      this.dx = this.dxSave;
     }
-    this.x += this.dx;
+    if (controller.up == true && controller.down == true) {
+      this.dy = this.dySave;
+    }
+    this.x += this.dx + hero.dx/1000;
     this.y += this.dy;
   }
 }
@@ -107,31 +152,34 @@ function moveRelativeToRadius(r, dy) {
 var starArray = [];
 for (var i = 0; i < 50; i++) {
   var color = RandomfillStar();
-  var radie = ((Math.random() * 2 ));
+  var radie = ((Math.random() * 2));
   var xC = Math.random() * (1.2*innerWidth);
   var yC = Math.random() * (1.2*innerHeight);
-  var dxC = (Math.random() * 0.01);
+  var dxC = moveRelativeToRadius(radie, ((Math.random() - 0.5) * 0.01));
   var dyC = moveRelativeToRadius(radie, 15);
   var glow = starColors[Math.floor(Math.random() * starColors.length)];
   starArray.push(new Stars(xC, yC, dxC, dyC, radie, color, glow));
 }
 
-function updateBackground(speedFactor, slowFactor, controlUp, controlDown) {
-  this.speedFactor = speedFactor;
-  this.slowFactor = slowFactor;
-  this.controlUp = controlUp;
-  this.controlDown = controlDown;
-
-
+function updateBackground() {
   for (var i = 0; i < starArray.length; i++) {
-    starArray[i].update(this.speedFactor, this.slowFactor, this.controlUp, this.controlDown);
+    starArray[i].update();
+    if(i < explosionArray.length) {
+    explosionArray[i].accelerate();
+    explosionArray[i].fade();
+    }
   }
 }
 
 function drawBackground(){
   c.clearRect(0, 0, innerWidth, innerHeight);
+
   for (var i = 0; i < starArray.length; i++) {
     starArray[i].draw();
+    if(i < explosionArray.length) {
+    explosionArray[i].draw();
+    explosionArray[i].fade();
+    }
   }
 }
 
@@ -143,4 +191,35 @@ function drawHealthBars(x, y, width, height, fraction, opacity) {
   c.fillStyle = "green";
   c.fillRect(x, y, width*fraction, height);
   c.globalAlpha = 1;
+}
+
+function plusOrMinus() {
+  x = Math.random() < 0.5 ? -1 : 1;
+  return x;
+}
+
+var explosionArray = [];
+
+function explosion(x, y) {
+
+  var particles = 200;
+    for (var i = 0; i < particles; i++) {
+    var radie = ((Math.random() * 5) + 1);
+    var color;
+    if(radie > 4) {
+      color = explosionColor1[Math.floor(Math.random() * explosionColor1.length)];
+    }
+    else if(radie > 2.5) {
+      color = explosionColor2[Math.floor(Math.random() * explosionColor2.length)];
+    }
+    else {
+      color = explosionColor3[Math.floor(Math.random() * explosionColor3.length)];
+    }
+    var glow = color;
+    var dxC = plusOrMinus()*Math.random();
+    var dyC = plusOrMinus()*Math.sqrt(1 - Math.pow(dxC, 2));
+    explosionArray.push(new Stars(x, y, dxC, dyC, radie, color, glow));
+    explosionArray[i].moveRelativeToMass();
+    exploded = true;
+  }
 }
