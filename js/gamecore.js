@@ -120,6 +120,9 @@ function init(){
   preload();
   LaserSoundEffect.volume = 0.2;
   bossmusic1.volume = 0.5;
+  boom.volume = 0.15;
+  //LargeChrash.volume = 0.3;
+  chrash3.volume = 0.2;
   Sprites.push(hero);
   mouse.x = canvas.width/2;
   mouse.y = canvas.height/3;

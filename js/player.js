@@ -64,9 +64,6 @@ hero.update = function(dt) {
   if (this.HP <= hero.maxHP/15) {
     turn.volume = 0.34;
     turn.play();
-    if(!exploded) {
-      explosion(hero.x, hero.y);
-    }
   }
   if (this.HP <= 0) {
     gameOver(true);

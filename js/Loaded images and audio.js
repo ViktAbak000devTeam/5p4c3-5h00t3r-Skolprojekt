@@ -24,10 +24,6 @@ var deadSoundArray = [
 ];
 
 function pickDeadSound() {
-  boom.volume = 0.5;
-  //(LargeChrash.volume = 0.3;
-  chrash3.voume = 0.3;
-
   var selected = deadSoundArray[Math.floor(Math.random() * deadSoundArray.length)];
   selected.play();
 }
