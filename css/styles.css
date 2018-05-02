@@ -47,9 +47,26 @@ audio {
   display: none;
 }
 
+#over {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Press Start 2P', cursive;
+  color: rgb(150, 255, 0);
+  font-size: 50px;
+  display: none;
+  background: linear-gradient(180deg, rgb(16, 205, 75), rgb(0, 236, 151));
+  background-size: 400% 400%;
+  animation: Anime 0.01s ease infinite;
+}
+
 body.paused #pauseMenu {
   display: inline-block;
 }
+
+
 
 /*div{
   position: absolute;

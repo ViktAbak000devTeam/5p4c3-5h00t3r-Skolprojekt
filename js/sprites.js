@@ -38,7 +38,8 @@ function Fiender(x, y, type, dx, dy) {
     else if(this.HP <= 0){
       Monster.splice(Monster.indexOf(this), 1);
       Sprites.splice(Sprites.indexOf(this), 1);
-      hero.deathsound.play();
+      pickDeadSound();
+      explosion(this.x, this.y,((Math.random() * 5) + 1));
     }
     this.cooldown-=dt;
     this.fire();
@@ -124,9 +125,14 @@ function Thonfors(x, y, dx, dy){
   this.update = function(dt){
 
     if(this.HP <= 0){
+      BossExplosion.volume = 1;
+      BossExplosion.play();
+      explosion(this.x+20, this.y+20);
+      explosion(this.x-20, this.y-20);
+      explosion(this.x, this.y);
       Sprites.splice(Sprites.indexOf(this), 1);
-      hero.deathsound.play();
     }
+
 
     if(this.y - this.radius > 0){
       this.x += this.dx*dt;

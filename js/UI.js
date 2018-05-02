@@ -11,7 +11,7 @@ function drawUI(){
   c.fillText(pad(hero.score, 6),canvas.width - 150,canvas.height-30);
 
   drawHealthBars(30, canvas.height-50, 250, 25, hero.HP/hero.maxHP, 0.4);
-  
+
   if(!controller.paused){
     c.drawImage(hero.crosshair,mouse.x-25, mouse.y-25, 50, 50);
   }

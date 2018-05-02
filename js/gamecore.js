@@ -1,5 +1,6 @@
 
 
+var bossAtLevel = 5;
 
 var enemyTypes = [
   {
@@ -10,18 +11,18 @@ var enemyTypes = [
     level: 0
   },
   {
-    maxHP: 100,
+    maxHP: 80,
     attackInterval: 0.6,
     imageID: "Enemyship2",
     damage: 5,
-    level: 2
+    level: 3
   },
   {
-    maxHP: 150,
-    attackInterval: 0.4,
+    maxHP: 100,
+    attackInterval: 0.3,
     imageID: "Enemyship3",
-    damage: 10,
-    level: 5
+    damage: 1,
+    level: 7
   }
 ];
 
@@ -39,22 +40,26 @@ var EnemySpawner = function() {
   this.enemies = [];
   this.tick = function(dt) {
     this.level = Math.floor(this.score/400);
-    this.spawnRate = 4*Math.pow(0.9,this.level);
+    this.spawnRate = (4*Math.pow(0.96, this.level));
     for(var i = 0; i < enemyTypes.length; i++) {
       if(enemyTypes[i].level <= this.level && !this.enemies.includes(i)) {
         this.enemies.push(i);
       }
     }
-    var x = Math.random()*canvas.width;
+    var x = Math.random()*(canvas.width - 400);
     var y = Math.random()*canvas.height;
-    if(this.level == 4 && !this.biss) {
+
+    if(this.level == bossAtLevel && !this.biss) {
       this.biss = true;
       music.pause();
       bossmusic1.play();
-      boss = new Thonfors(x, -100, 30, 50);
+      boss = new Thonfors(x, -100, 60, 100);
       Sprites.push(boss);
-    }
+      bossAtLevel+=10;
+      }
+
     if(this.biss && boss.HP <= 0) {
+      hero.HP = hero.maxHP;
       this.biss = false;
       bossmusic1.pause();
       music.play();
@@ -86,6 +91,8 @@ var EnemySpawner = function() {
     Sprites.push(Fiende);
     Monster.push(Fiende);
   }
+
+  this
 }
 
 var EnemySpawnRate = 0;
@@ -113,6 +120,9 @@ function init(){
   preload();
   LaserSoundEffect.volume = 0.2;
   bossmusic1.volume = 0.5;
+  boom.volume = 0.15;
+  //LargeChrash.volume = 0.3;
+  chrash3.volume = 0.2;
   Sprites.push(hero);
   mouse.x = canvas.width/2;
   mouse.y = canvas.height/3;
@@ -142,6 +152,19 @@ function setPaused(v) {
   }
 }
 
+function gameOver(v) {
+  if (v) {
+    ESCAPE_KEY = undefined;
+    Sprites.splice(0, Sprites.length);
+    controller.paused = true;
+    music.pause();
+    BossExplosion.volume = 0.5;
+    BossExplosion.play();
+    GameOver.volume = 0.9;
+    GameOver.play();
+  }
+}
+
 var t0 = 0;
 var time = 0;
 var scoreCooldown = 0;
@@ -157,6 +180,7 @@ function loop(t) {
       scoreCooldown = 0.3;
     }
   }
+
   drawBackground();
   drawSprites();
   t0 = t;
