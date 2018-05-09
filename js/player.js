@@ -17,6 +17,10 @@ hero.cooldown = 0; //detta e en cooldown till skott/minut, 0 => farkosten kan sk
 hero.maxHP = 100;
 hero.HP = hero.maxHP;
 hero.score = 0;
+hero.fullAmmo = 10;
+hero.ammo = 10;
+hero.ammoResetTime = 2;
+hero.ammoResetCooldown = 0;
 
 hero.draw = function() {
   c.translate(hero.x, hero.y);
@@ -35,6 +39,7 @@ function clamp(min, max, value) {
 hero.update = function(dt) {
   this.angle = Math.atan2(hero.y - mouse.y, hero.x - mouse.x);
   this.cooldown -= dt;
+  this.ammoResetCooldown -= dt;
   if (controller.up) {
     hero.dy -= hero.movement * dt;
   }
@@ -61,12 +66,12 @@ hero.update = function(dt) {
   hero.x += hero.dx * dt;
   hero.y += hero.dy * dt;
 
-  if (this.HP <= hero.maxHP/15) {
+  if (this.HP <= 20) {
     turn.volume = 0.34;
     turn.play();
   }
   if (this.HP <= 0) {
-    gameOver(true);
+    gameOver();
     //window.location.href = "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/VGiBmTeaeilt7mgjb/game-over-retro-arcade-digital-blue-"
   }
 
@@ -89,7 +94,16 @@ hero.update = function(dt) {
 }
 
 hero.fire = function() {
-  if (this.cooldown > 0) return; // cooldown > 0 => funktionen ej kan aktiveras
+  if (this.cooldown > 0 || this.ammoResetCooldown > 0) return; // cooldown > 0 => funktionen ej kan aktiveras
+  if(this.ammo <= 0){
+    if(this.ammoResetCooldown > 0){
+      return;
+    }
+    else{
+      this.reload();
+    }
+  }
+
   var v = 1000;
   var dx = -Math.cos(this.angle);
   var dy = -Math.sin(this.angle);
@@ -100,6 +114,14 @@ hero.fire = function() {
   }
   Sprites.push(new this.Skott(this.x + dx * this.h / 2, this.y + dy * this.h / 2, dx * v, dy * v));
   this.cooldown = 0.25; //when function is activated, cooldown is set to greater than 0 to cool down
+  this.ammo -= 1;
+  if(this.ammo <=0){
+    this.ammoResetCooldown = this.ammoResetTime;
+  }
+}
+
+hero.reload = function() {
+  this.ammo = this.fullAmmo;
 }
 
 hero.takeDamage = function(dmg) {
@@ -125,6 +147,8 @@ function ensureBounds(sprite) {
     sprite.dy = 0;
   }
 }
+
+
 
 hero.Skott = function(x, y, dx, dy) {
   this.x = x;
@@ -174,4 +198,7 @@ hero.Skott = function(x, y, dx, dy) {
     }
     //anropar draw
   }
+
+
+
 }

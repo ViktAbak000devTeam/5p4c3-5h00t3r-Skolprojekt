@@ -200,9 +200,9 @@ function plusOrMinus() {
 
 var explosionArray = [];
 
+var particles = 0;
 function explosion(x, y) {
 
-  var particles = 200;
     for (var i = 0; i < particles; i++) {
     var radie = ((Math.random() * 5) + 1);
     var color;

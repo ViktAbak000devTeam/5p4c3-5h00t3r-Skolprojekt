@@ -39,6 +39,7 @@ function Fiender(x, y, type, dx, dy) {
       Monster.splice(Monster.indexOf(this), 1);
       Sprites.splice(Sprites.indexOf(this), 1);
       pickDeadSound();
+      particles = 200;
       explosion(this.x, this.y,((Math.random() * 5) + 1));
     }
     this.cooldown-=dt;
@@ -104,6 +105,9 @@ function Thonfors(x, y, dx, dy){
   this.maxHP = 500;
   this.radius = 100;
   this.score = 1000;
+  this.cooldown = 0;
+  this.damage = 5;
+  this.angle = 0;
   this.HP = this.maxHP;
   var img = document.getElementById("Thonfors");//loada Bilder
   this.draw = function(){
@@ -125,6 +129,115 @@ function Thonfors(x, y, dx, dy){
   this.update = function(dt){
 
     if(this.HP <= 0){
+      particles = 300;
+      BossExplosion.volume = 1;
+      BossExplosion.play();
+      explosion(this.x+20, this.y+20);
+      explosion(this.x-20, this.y-20);
+      explosion(this.x, this.y);
+      Sprites.splice(Sprites.indexOf(this), 1);
+    }
+    if(this.y - this.radius > 0){
+      this.x += this.dx*dt;
+      this.y += this.dy*dt;
+
+        if(this.x+this.radius >= canvas.width || this.x-this.radius <= 0){
+          this.dx = -this.dx;
+        }
+        if(this.y+this.radius >= canvas.height || this.y-this.radius<= 0){
+          this.dy = -this.dy;
+        }
+      }
+      else{
+      this.x += this.dx*dt;
+      this.y += this.dy*dt;
+      }
+      this.cooldown -= dt;
+      this.angle += dt*Math.PI;
+      if(this.angle >= 2*Math.PI) {
+        this.angle -= 2*Math.PI;
+      }
+      this.fire();
+      this.draw();
+    }
+    this.applyDamage = function(dmg){
+      this.HP -= dmg;
+    }
+    this.fire = function(){
+      if(this.cooldown > 0) return;// cooldown > 0 => funktionen ej kan aktiveras
+      var v = 1000;
+      for(var angle = 0; angle < 2*Math.PI; angle += Math.PI/10) {
+        var dx = -Math.cos(angle+this.angle);
+        var dy = -Math.sin(angle+this.angle);
+        Sprites.push(new this.Skott(this.x+dx*this.radius, this.y+dy*this.radius, dx*v, dy*v, this.damage));
+      }
+      this.cooldown = this.HP/this.maxHP + 0.4; //when function is activated, cooldown is set to greater than 0 to cool down
+    }
+    this.Skott = function(x,y,dx,dy,damage) {
+      this.x = x;
+      this.y = y;
+      this.dx = dx;
+      this.dy = dy;
+      this.damage = damage;
+      this.angle = Math.atan2(-dy, -dx);
+      var img = document.getElementById("fiendeskott");
+      this.draw = function() {
+        c.translate(this.x, this.y);//flyttar skotten till this.x, this.y
+        c.rotate(this.angle - Math.PI/2);//roterar skottet efter musens position
+        c.drawImage(img,-50,-50,100,100);
+        c.rotate(-this.angle + Math.PI/2);//tillater att skottet roterar at andra hallet
+        c.translate(-this.x, -this.y);//tillater en tillbakaflyttning
+      }
+
+      this.update = function(dt) {
+        this.x += this.dx*dt;
+        this.y += this.dy*dt;
+        // Testa kollision
+        var DeltaX = this.x - hero.x;
+        var DeltaY = this.y - hero.y;
+        if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < hero.radius){
+          hero.takeDamage(this.damage);
+          Sprites.splice(Sprites.indexOf(this), 1);
+        }
+        // Tar bort skott utanfor skarmen
+        if(this.x < 0 || this.x > window.innerWidth
+          || this.y < 0 || this.y > window.innerHeight) {
+          Sprites.splice(Sprites.indexOf(this), 1);//splicar ut elementet ur arrayen
+        }
+      }
+    }
+}
+
+function MinskaMatSvinnet(x, y, dx, dy){
+  this.x = x;
+  this.y = y;
+  this.dx = dx;
+  this.dy = dy;
+  this.maxHP = 1000;
+  this.radius = 150;
+  this.score = 1000;
+  this.HP = this.maxHP;
+  var img = document.getElementById("Lena");//loada Bilder
+  this.draw = function(){
+    c.drawImage(img,
+      Math.floor(this.x-this.radius),
+      Math.floor(this.y-this.radius),
+      2*this.radius,
+      2*this.radius);
+      c.fillStyle = "pink";
+      c.globalAlpha = 1 - (this.HP/this.maxHP);
+      c.fillRect(
+        Math.floor(this.x-this.radius),
+        Math.floor(this.y-this.radius),
+        2*this.radius,
+        2*this.radius);
+      c.globalAlpha = 1;
+    drawHealthBars(this.x-75, this.y-this.radius - 15, 100, 10, this.HP/this.maxHP);
+  }
+  this.update = function(dt){
+
+    if(this.HP <= 0){
+      particles = 1000;
       BossExplosion.volume = 1;
       BossExplosion.play();
       explosion(this.x+20, this.y+20);

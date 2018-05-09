@@ -1,7 +1,16 @@
+#startmenu{
+  border: 1px solid;
+}
 
-
-canvas {
+#game {
   border: 1px solid Anime;
+}
+
+button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 body {
@@ -13,7 +22,7 @@ body {
   cursor: none;
 }
 
-body.paused {
+body.paused, body.notplaying, body.gameover {
   cursor: default;
 }
 
@@ -27,15 +36,12 @@ body.paused {
   font-family: Arcade;
   src: url();
 }
-img {
+
+img, audio {
   display: none;
 }
 
-audio {
-  display: none;
-}
-
-#pauseMenu {
+#pauseMenu, #gameOver, #mainMenu {
   position: absolute;
   text-align: center;
   top: 50%;
@@ -47,25 +53,50 @@ audio {
   display: none;
 }
 
-#over {
-  position: absolute;
-  text-align: center;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Press Start 2P', cursive;
-  color: rgb(150, 255, 0);
-  font-size: 50px;
-  display: none;
+#gameOver {
   background: linear-gradient(180deg, rgb(16, 205, 75), rgb(0, 236, 151));
   background-size: 400% 400%;
-  animation: Anime 0.01s ease infinite;
+  animation: Anime 0.7s ease infinite;
+}
+
+#pauseMenu p, #mainMenu p, #gameOver p {
+  float: left;
+  clear: both;
+  position: relative;
+  display: block;
+}
+
+#pauseMenu button, #mainMenu button, #gameOver button {
+  float: left;
+  clear: both;
+  position: relative;
+  margin-bottom: 0px;
+  display: block;
+  border: 5px solid rgb(0, 19, 255);
+  border-radius: 0px;
+  background-color: rgb(0, 125, 139);
+  padding: 20px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 40px;
+}
+
+#pauseMenu button:hover, #mainMenu button:hover, #gameOver button:hover {
+  background-color: rgb(0, 229, 255);
+  box-shadow: 0px 0px 10px 3px rgba(0, 19, 255, 0.7) inset, 0px 0px 10px 3px rgba(0, 19, 255, 0.7);
+}
+
+
+body.gameover #gameOver {
+  display: inline-block;
+}
+
+body.notplaying #mainMenu {
+  display: inline-block;
 }
 
 body.paused #pauseMenu {
   display: inline-block;
 }
-
 
 
 /*div{

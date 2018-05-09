@@ -2,6 +2,11 @@
 
 var bossAtLevel = 5;
 
+/*
+* this array contains the different enemytypes that can spawn. The "level" attribute is what determines when
+* the specific type can spawn. "level" relies on the "score"-variable.
+*/
+
 var enemyTypes = [
   {
     maxHP: 50,
@@ -11,7 +16,7 @@ var enemyTypes = [
     level: 0
   },
   {
-    maxHP: 80,
+    maxHP: 75,
     attackInterval: 0.6,
     imageID: "Enemyship2",
     damage: 5,
@@ -28,7 +33,11 @@ var enemyTypes = [
 
 
 
-var boss = undefined;
+var boss = undefined; //this variable is essential for the boss spawning in
+
+/*
+*
+*/
 
 var EnemySpawner = function() {
   this.time = 0;
@@ -91,8 +100,6 @@ var EnemySpawner = function() {
     Sprites.push(Fiende);
     Monster.push(Fiende);
   }
-
-  this
 }
 
 var EnemySpawnRate = 0;
@@ -126,11 +133,17 @@ function init(){
   Sprites.push(hero);
   mouse.x = canvas.width/2;
   mouse.y = canvas.height/3;
+  hero.HP = hero.maxHP;
+  hero.score = 0;
+  hero.x = canvas.width/2;
+  hero.y = canvas.height*2/3;
+  music.currentTime = 0;
   setPaused(false);
   window.requestAnimationFrame(loop);
 }
 
 function setPaused(v) {
+  controller.paused = v;
   if(v) {
     music.pause();
     pausemusic.play();
@@ -139,6 +152,7 @@ function setPaused(v) {
     document.body.className = "paused";
   }
   else {
+    pausemusic.pause();
     if(boss != undefined){
       bossmusic1.play();
       document.body.className = "";
@@ -146,33 +160,50 @@ function setPaused(v) {
     else{
       music.play();
       music.volume = 0.5;
-      pausemusic.pause();
       document.body.className = "";
     }
   }
 }
 
-function gameOver(v) {
-  if (v) {
-    ESCAPE_KEY = undefined;
-    Sprites.splice(0, Sprites.length);
-    controller.paused = true;
-    music.pause();
-    BossExplosion.volume = 0.5;
-    BossExplosion.play();
-    GameOver.volume = 0.9;
-    GameOver.play();
-  }
+function gameOver() {
+  controller.playing = false;
+  backgroundLoop();
+  Sprites.splice(0, Sprites.length);
+  Monster.splice(0, Monster.length);
+  music.pause();
+  BossExplosion.volume = 0.5;
+  BossExplosion.play();
+  GameOver.volume = 0.9;
+  GameOver.play();
+  document.body.className = "gameover";
+}
+
+function goToMainMenu() {
+  document.body.className = "notplaying";
+}
+
+function startGame() {
+  controller.playing = true;
+  document.body.className = "";
+  init();
 }
 
 var t0 = 0;
+function backgroundLoop(t) {
+  t0 = t;
+  updateBackground();
+  drawBackground();
+  if(!controller.playing) {
+    window.requestAnimationFrame(backgroundLoop);
+  }// valkommenterad kod
+}
+
 var time = 0;
 var scoreCooldown = 0;
 function loop(t) {
   var dt = (t - t0)/1000;
   time += dt;
   if(!controller.paused) {
-    updateBackground();
     updateObjects(dt);
     scoreCooldown -= dt;
     if(scoreCooldown <= 0) {
@@ -180,10 +211,13 @@ function loop(t) {
       scoreCooldown = 0.3;
     }
   }
-
+  updateBackground();
   drawBackground();
   drawSprites();
   t0 = t;
   drawUI();
-  window.requestAnimationFrame(loop);
+  if(controller.playing) {
+    window.requestAnimationFrame(loop);
+  }
+  // if the game is over, don't call this loop again.
 }

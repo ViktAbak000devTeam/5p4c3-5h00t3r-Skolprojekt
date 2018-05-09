@@ -25,22 +25,32 @@
   <img src="./images/beams.png" id="skott"></img>
   <img src="./images/EnemyBeams2.png" id="fiendeskott" alt="">
   <img src="./images/ship.gif" id= "ship"></img>
+  <img src="./images/ship3edited.png" id="Lena"></img>
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" id="font">
   </head>
-<body>
-    <canvas></canvas>
+<body class="notplaying">
+    <canvas id="startmenu"></canvas>
+    <canvas id="game"></canvas>
     <script src="./js/gamecore.js"></script>
     <script src="./js/Loaded images and audio.js"></script>
     <script src ="./js/UI.js"></script>
     <script src="./js/player.js"></script>
     <script src="./js/sprites.js"></script>
     <script src ="./js/input.js"></script>
-    <script src="./js/canvas.js"></script>
+    <script src="./js/gamecanvas.js"></script>
     <script>
-      init();
+      backgroundLoop();
     </script>
     <div id ="pauseMenu">
-      G4M3 I5 P4U53D
+      <p>G4M3 I5 P4U53D</p>
+      <button onclick="setPaused(false);">R35UM3</button>
+    </div>
+    <div id="mainMenu">
+      <p>G3T R34DY F0R Y0UR D00M</p>
+      <button onclick="startGame()">5T4RT G4M3</button>
+    </div>
+    <div id="gameOver">
+      <button onclick="goToMainMenu()">Goe Tho de majn maenju on</button>
     </div>
 </body>
 </html>

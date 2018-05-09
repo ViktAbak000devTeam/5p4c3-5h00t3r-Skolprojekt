@@ -10,6 +10,11 @@ function drawUI(){
   c.fillStyle = "white";
   c.fillText(pad(hero.score, 6),canvas.width - 150,canvas.height-30);
 
+  c.beginPath();
+  c.font = "30px Comic Sans MS";
+  c.fillStyle = "white";
+  c.fillText(pad("Ammo: " + hero.ammo + "/" + hero.fullAmmo, 2),canvas.width - 400,canvas.height-30);
+
   drawHealthBars(30, canvas.height-50, 250, 25, hero.HP/hero.maxHP, 0.4);
 
   if(!controller.paused){

@@ -4,6 +4,7 @@ var RIGHT_KEY = 68;
 var DOWN_KEY = 83;
 var SPACE_KEY = 32;
 var ESCAPE_KEY = 27;
+var RELOAD_KEY = 82;
 
 var mouse = {
   x: undefined,
@@ -42,23 +43,23 @@ function togglekey(keyCode, isPressed) {
   }
   if (keyCode == UP_KEY) {
     controller.up = isPressed;
-<<<<<<< HEAD
     updateSpeed(1.2, 30, 0, controller.up);
   }
   if (keyCode == DOWN_KEY) {
     controller.down = isPressed;
     updateSpeed(0.9, 30, 10, controller.down);
-=======
   }
   if (keyCode == DOWN_KEY) {
     controller.down = isPressed;
->>>>>>> ec9b0a7fa156d4ef06d9aee27961dab97eaa8245
   }
   if (keyCode == SPACE_KEY) {
     controller.space = isPressed;
   }
   if (keyCode == ESCAPE_KEY && isPressed) {
-    controller.paused = !controller.paused;
-    setPaused(controller.paused);
+    setPaused(!controller.paused);
+  }
+  if (keyCode == RELOAD_KEY && isPressed) {
+    hero.reload();
+    hero.ammoResetCooldown = hero.ammoResetTime;
   }
 }
