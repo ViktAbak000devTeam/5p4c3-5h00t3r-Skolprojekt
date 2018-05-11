@@ -152,6 +152,7 @@ function init(){
   hero.y = canvas.height*2/3;
   music.currentTime = 0;
   setPaused(false);
+  music.loop = true;
   window.requestAnimationFrame(loop);
 }
 
