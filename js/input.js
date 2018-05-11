@@ -1,10 +1,19 @@
-var LEFT_KEY = 65;
-var UP_KEY = 87;
-var RIGHT_KEY = 68;
-var DOWN_KEY = 83;
-var SPACE_KEY = 32;
-var ESCAPE_KEY = 27;
-var RELOAD_KEY = 82;
+var LEFT_KEY;
+var UP_KEY;
+var RIGHT_KEY;
+var DOWN_KEY;
+var SPACE_KEY;
+var ESCAPE_KEY;
+var RELOAD_KEY;
+function loadKeys(){
+  LEFT_KEY = 65;
+  UP_KEY = 87;
+  RIGHT_KEY = 68;
+  DOWN_KEY = 83;
+  SPACE_KEY = 32;
+  ESCAPE_KEY = 27;
+  RELOAD_KEY = 82;
+}
 
 var mouse = {
   x: undefined,

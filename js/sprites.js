@@ -32,7 +32,6 @@ function Fiender(x, y, type, dx, dy) {
     this.y += this.dy*dt;
     this.angle = Math.atan2(this.y - hero.y, this.x - hero.x);
     if(this.y - 75 > canvas.height){
-      Monster.splice(Monster.indexOf(this), 1);
       Sprites.splice(Sprites.indexOf(this), 1);
     }
     else if(this.HP <= 0){
@@ -42,6 +41,7 @@ function Fiender(x, y, type, dx, dy) {
       particles = 200;
       explosion(this.x, this.y,((Math.random() * 5) + 1));
     }
+    
     this.cooldown-=dt;
     this.fire();
   }
@@ -106,7 +106,7 @@ function Thonfors(x, y, dx, dy){
   this.radius = 100;
   this.score = 1000;
   this.cooldown = 0;
-  this.damage = 5;
+  this.damage = 8;
   this.angle = 0;
   this.HP = this.maxHP;
   var img = document.getElementById("Thonfors");//loada Bilder
@@ -129,7 +129,7 @@ function Thonfors(x, y, dx, dy){
   this.update = function(dt){
 
     if(this.HP <= 0){
-      particles = 300;
+      particles = 600;
       BossExplosion.volume = 1;
       BossExplosion.play();
       explosion(this.x+20, this.y+20);
@@ -171,7 +171,7 @@ function Thonfors(x, y, dx, dy){
         var dy = -Math.sin(angle+this.angle);
         Sprites.push(new this.Skott(this.x+dx*this.radius, this.y+dy*this.radius, dx*v, dy*v, this.damage));
       }
-      this.cooldown = this.HP/this.maxHP + 0.4; //when function is activated, cooldown is set to greater than 0 to cool down
+      this.cooldown = this.HP/this.maxHP + 0.2; //when function is activated, cooldown is set to greater than 0 to cool down
     }
     this.Skott = function(x,y,dx,dy,damage) {
       this.x = x;

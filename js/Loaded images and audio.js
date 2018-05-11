@@ -3,6 +3,7 @@ var pausemusic;
 var bossmusic1;
 var LaserSoundEffect;
 var EnemyLaserBeamsSoundEffect;
+var Asteroid = document.getElementById("Asteroid");
 
 function preload(){
   LaserSoundEffect = document.getElementById("LaserSound");
@@ -15,6 +16,7 @@ function preload(){
   boom = document.getElementById("boom");
   chrash3 = document.getElementById("chrash3");
   turn = document.getElementById("turn");
+
 }
 
 var deadSoundArray = [

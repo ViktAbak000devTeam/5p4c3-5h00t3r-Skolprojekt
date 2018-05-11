@@ -17,8 +17,9 @@ hero.cooldown = 0; //detta e en cooldown till skott/minut, 0 => farkosten kan sk
 hero.maxHP = 100;
 hero.HP = hero.maxHP;
 hero.score = 0;
-hero.fullAmmo = 10;
-hero.ammo = 10;
+hero.level = 0;
+hero.fullAmmo = 15;
+hero.ammo = hero.fullAmmo;
 hero.ammoResetTime = 2;
 hero.ammoResetCooldown = 0;
 

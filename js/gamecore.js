@@ -43,7 +43,7 @@ var EnemySpawner = function() {
   this.time = 0;
   this.spawnRate = 4;
   this.cooldown = 0;
-  this.score = 0;
+  this.score = 1900;
   this.level = 0;
   this.biss = false;
   this.enemies = [];
@@ -88,8 +88,11 @@ var EnemySpawner = function() {
   }
   this.spawnEnemy = function() {
     var i = Math.floor(Math.random()*this.enemies.length);
-
     var x = Math.random()*canvas.width;
+    var dx = Math.random();
+    if(dx > 0.5){
+      dx = -dx/2
+    }
     if(x < 50){
       x = 50;
     }
@@ -99,6 +102,12 @@ var EnemySpawner = function() {
     var Fiende = new Fiender(x, -100, enemyTypes[i], 10, 70);
     Sprites.push(Fiende);
     Monster.push(Fiende);
+    var asteroidSpawnRate = Math.random()*100;
+    var Asteroider = new Asteroids(x, -Asteroid.height, dx, 0.5, Asteroid.width, Asteroid.height, Math.floor((Asteroid.width*2)/3));
+    if(Math.floor(asteroidSpawnRate) >=95){
+      Sprites.push(Asteroider);
+      Monster.push(Asteroider);
+    }
   }
 }
 
@@ -125,6 +134,7 @@ function drawSprites() {
 
 function init(){
   preload();
+  loadKeys();
   LaserSoundEffect.volume = 0.2;
   bossmusic1.volume = 0.5;
   boom.volume = 0.15;
@@ -167,10 +177,12 @@ function setPaused(v) {
 
 function gameOver() {
   controller.playing = false;
+  ESCAPE_KEY = undefined;
   backgroundLoop();
   Sprites.splice(0, Sprites.length);
   Monster.splice(0, Monster.length);
   music.pause();
+  bossmusic1.pause();
   BossExplosion.volume = 0.5;
   BossExplosion.play();
   GameOver.volume = 0.9;

@@ -36,6 +36,60 @@ window.addEventListener('resize', function(){
   canvas.height = window.innerHeight;
 });//Denna resizar canvasen efter rutans storlek
 
+function Asteroids(x, y, dx, dy, width, height, radie, drop){
+  this.x = x;
+  this.y = y;
+  this.dx = dx;
+  this.dy = dy;
+  this.width = width;
+  this.height = height;
+  this.radius = radie;
+  this.drop = drop;
+  this.img = Asteroid;
+  this.damage = hero.HP;
+  this.maxHP = 200;
+  this.HP = this.maxHP;
+  this.draw = function(){
+    c.drawImage(this.img, this.x-this.width, this.y-this.height, this.width*2, this.height*2);
+    drawHealthBars(this.x - 50, this.y-this.height, 100, 10, this.HP/this.maxHP);
+  }
+  this.applyDamage = function(damage){
+    this.HP -= damage;
+  }
+  this.update = function(){
+    this.x += this.dx;
+    this.y += this.dy;
+    this.draw();
+
+    if(this.HP <= 0){
+      particles = 600;
+      BossExplosion.volume = 1;
+      BossExplosion.play();
+      explosion(this.x+20, this.y+20);
+      explosion(this.x-20, this.y-20);
+      explosion(this.x, this.y);
+      Sprites.splice(Sprites.indexOf(this), 1);
+      Monster.splice(Monster.indexOf(this), 1);
+    }
+    /*if(this.HP <= 0){
+
+    }*/
+    var DeltaX = this.x - hero.x;
+    var DeltaY = this.y - hero.y;
+    if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < hero.radius){
+        hero.takeDamage(this.damage);
+    }
+    /*Sprites.splice(Sprites.indexOf(this), 1);
+    Monster.splice(Monster.indexOf(this), 1);*/
+    // Tar bort skott utanfor skarmen
+    /*if(this.x < 0 || this.x > window.innerWidth
+    || this.y < 0 || this.y > window.innerHeight) {
+      Sprites.splice(Sprites.indexOf(this), 1);//splicar ut elementet ur arrayen
+    }*/
+
+  }
+}
+
 function Stars(x, y, dx, dy, radie, color, glow) {
   this.x = x;
   this.y = y;
