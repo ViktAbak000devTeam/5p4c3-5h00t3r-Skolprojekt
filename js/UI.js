@@ -6,12 +6,12 @@ function pad(n, width, z) {
 }
 
 function drawUI(){
-  c.font = "30px Comic Sans MS";
+  c.font = "30px Arcade";
   c.fillStyle = "white";
   c.fillText(pad(hero.score, 6),canvas.width - 150,canvas.height-30);
 
   c.beginPath();
-  c.font = "30px Comic Sans MS";
+  c.font = "30px Arcade";
   c.fillStyle = "white";
   c.fillText(pad("Ammo: " + hero.ammo + "/" + hero.fullAmmo, 2),canvas.width - 400,canvas.height-30);
 
