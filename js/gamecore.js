@@ -96,8 +96,8 @@ var EnemySpawner = function() {
     //this if-statement decides what happens when the boss dies
 
     if(this.biss && hero.HP <= 0){
-      this.biss = false;
       boss = undefined;
+      this.biss = false;
       gameOver();
     }
     //this if-statement is essential for when the player dies during a boss-fight

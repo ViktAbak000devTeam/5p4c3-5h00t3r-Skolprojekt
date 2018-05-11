@@ -71,25 +71,27 @@ hero.update = function(dt) {
     turn.volume = 0.34;
     turn.play();
   }
-  if (this.HP <= 0) {
+  if (this.HP <= 0 && boss == undefined) {
     gameOver();
-    //window.location.href = "https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/VGiBmTeaeilt7mgjb/game-over-retro-arcade-digital-blue-"
   }
 
 
   for (var i = Monster.length - 1; i >= 0; i--) {
     var DeltaHX = this.x - Monster[i].x;
     var DeltaHY = this.y - Monster[i].y;
-  if (Math.sqrt(DeltaHX * DeltaHX + DeltaHY * DeltaHY) < Monster[i].radius + this.radius) {
+    if (Math.sqrt(DeltaHX * DeltaHX + DeltaHY * DeltaHY) < Monster[i].radius + this.radius) {
       hero.takeDamage(15 * dt);
-  }
+    }
 
   if (boss != undefined) {
     var DeltaHX = this.x - boss.x;
     var DeltaHY = this.y - boss.y;
+    ensureBounds(hero);
     if (Math.sqrt(DeltaHX * DeltaHX + DeltaHY * DeltaHY) < boss.radius + this.radius) {
-      hero.takeDamage(hero.HP);
+      hero.takeDamage(100);
     }
+  }
+  ensureBounds(hero);
   }
   ensureBounds(hero);
 }
@@ -207,5 +209,4 @@ hero.Skott = function(x, y, dx, dy) {
 
 
 
-}
 }

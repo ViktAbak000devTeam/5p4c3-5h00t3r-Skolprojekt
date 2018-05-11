@@ -91,22 +91,3 @@ body.notplaying #mainMenu {
 body.paused #pauseMenu {
   display: inline-block;
 }
-
-
-/*div{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  font-family: ;
-  color: black;
-  font-weight: 800;
-  text-transform: uppercase;
-  text-align: center;
-  font-size: 3em;
-  background-color: black;
-  padding: 1px;
-  background: linear-gradient(180deg, rgb(16, 205, 75), rgb(0, 236, 151));
-  background-size: 400% 400%;
-  animation: Anime 0.01s ease infinite;
-}*/

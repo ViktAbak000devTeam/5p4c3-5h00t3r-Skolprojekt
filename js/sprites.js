@@ -152,13 +152,13 @@ function Thonfors(x, y, dx, dy){
       this.x += this.dx*dt;
       this.y += this.dy*dt;
       }
-      this.cooldown -= dt;
-      this.angle += dt*Math.PI;
+    this.cooldown -= dt;
+    this.angle += dt*Math.PI;
       if(this.angle >= 2*Math.PI) {
         this.angle -= 2*Math.PI;
       }
-      this.fire();
-      this.draw();
+    this.fire();
+    this.draw();
     }
     this.applyDamage = function(dmg){
       this.HP -= dmg;
@@ -211,65 +211,4 @@ function Thonfors(x, y, dx, dy){
         }
       }
     }
-}
-
-function MinskaMatSvinnet(x, y, dx, dy){
-  this.x = x;
-  this.y = y;
-  this.dx = dx;
-  this.dy = dy;
-  this.maxHP = 1000;
-  this.radius = 150;
-  this.score = 1000;
-  this.HP = this.maxHP;
-  var img = document.getElementById("Lena");//loada Bilder
-  this.draw = function(){
-    c.drawImage(img,
-      Math.floor(this.x-this.radius),
-      Math.floor(this.y-this.radius),
-      2*this.radius,
-      2*this.radius);
-      c.fillStyle = "pink";
-      c.globalAlpha = 1 - (this.HP/this.maxHP);
-      c.fillRect(
-        Math.floor(this.x-this.radius),
-        Math.floor(this.y-this.radius),
-        2*this.radius,
-        2*this.radius);
-      c.globalAlpha = 1;
-    drawHealthBars(this.x-75, this.y-this.radius - 15, 100, 10, this.HP/this.maxHP);
-  }
-  this.update = function(dt){
-
-    if(this.HP <= 0){
-      particles = 1000;
-      BossExplosion.volume = 1;
-      BossExplosion.play();
-      explosion(this.x+20, this.y+20);
-      explosion(this.x-20, this.y-20);
-      explosion(this.x, this.y);
-      Sprites.splice(Sprites.indexOf(this), 1);
-    }
-
-
-    if(this.y - this.radius > 0){
-      this.x += this.dx*dt;
-      this.y += this.dy*dt;
-
-        if(this.x+this.radius >= canvas.width || this.x-this.radius <= 0){
-          this.dx = -this.dx;
-        }
-        if(this.y+this.radius >= canvas.height || this.y-this.radius<= 0){
-          this.dy = -this.dy;
-        }
-      }
-      else{
-      this.x += this.dx*dt;
-      this.y += this.dy*dt;
-      }
-    }
-    this.draw();
-    this.applyDamage = function(dmg){
-      this.HP -= dmg;
-  }
 }
