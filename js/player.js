@@ -80,15 +80,15 @@ hero.update = function(dt) {
   for (var i = Monster.length - 1; i >= 0; i--) {
     var DeltaHX = this.x - Monster[i].x;
     var DeltaHY = this.y - Monster[i].y;
-    if (Math.sqrt(DeltaHX * DeltaHX + DeltaHY * DeltaHY) < Monster[i].radius + this.radius) {
+  if (Math.sqrt(DeltaHX * DeltaHX + DeltaHY * DeltaHY) < Monster[i].radius + this.radius) {
       hero.takeDamage(15 * dt);
-    }
   }
+
   if (boss != undefined) {
     var DeltaHX = this.x - boss.x;
     var DeltaHY = this.y - boss.y;
     if (Math.sqrt(DeltaHX * DeltaHX + DeltaHY * DeltaHY) < boss.radius + this.radius) {
-      hero.takeDamage(15 * dt);
+      hero.takeDamage(hero.HP);
     }
   }
   ensureBounds(hero);
@@ -129,6 +129,11 @@ hero.reload = function() {
 
 hero.takeDamage = function(dmg) {
   hero.HP -= dmg;
+  if (!hitsound.paused) {
+    hitsound.currentTime = 0;
+  } else {
+    hitsound.play(); //DETTA SPELAR UPP LJUD TILL LASERORKESTRALEN
+  }
 }
 // Lagger till hero i listan av sprites
 
@@ -202,4 +207,5 @@ hero.Skott = function(x, y, dx, dy) {
 
 
 
+}
 }

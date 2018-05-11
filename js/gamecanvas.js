@@ -1,27 +1,34 @@
+
+//These two variables are what draw the canvas
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext('2d');
 
+//here we set the canvas measures equal to the window measures.
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+//This array is used for giving the stars in the background random colors
 var starColors = [
   'rgb(255, 214, 0)',
   'rgb(0, 255, 181)',
   'rgb(0, 79, 255)'
 ];
 
+///this array is used for giving the explosion particles different colors
 var explosionColor1 = [
   'rgba(225, 160, 0, 1)',
   'rgba(240, 255, 0, 1)',
   'rgba(225, 180, 0, 1)'
 ];
 
+///this array is used for giving the explosion particles different colors
 var explosionColor2 = [
   'rgba(255, 101, 0, 1)',
   'rgba(255, 130, 0, 1)',
   'rgba(255, 140, 0, 1)'
 ];
 
+///this array is used for giving the explosion particles different colors
 var explosionColor3 = [
   'rgba(246, 19, 0, 1)',
   'rgba(255, 50, 0, 1)',
@@ -30,12 +37,21 @@ var explosionColor3 = [
 
 var exploded = false;
 
+/*
+* This eventlistener makes it so that when the window is resized, the canvas
+* resizes with it. This way, if the window is minimized and then maximized, the
+* canvas and everything on it will stay proportionate.
+*/
 window.addEventListener('resize', function(){
-
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });//Denna resizar canvasen efter rutans storlek
 
+/*
+* This is the constructor for drawing the asteroids. When the player collides
+* with an asteroid, the player dies instantly. The asteroid can take damage, and
+* when it dies, it exploads and gives the player max HP.
+*/
 function Asteroids(x, y, dx, dy, width, height, radie, drop){
   this.x = x;
   this.y = y;
@@ -52,7 +68,7 @@ function Asteroids(x, y, dx, dy, width, height, radie, drop){
   this.draw = function(){
     c.drawImage(this.img, this.x-this.width, this.y-this.height, this.width*2, this.height*2);
     drawHealthBars(this.x - 50, this.y-this.height, 100, 10, this.HP/this.maxHP);
-  }
+  } //this draws the asteroid and its healtbar
   this.applyDamage = function(damage){
     this.HP -= damage;
   }
@@ -62,6 +78,7 @@ function Asteroids(x, y, dx, dy, width, height, radie, drop){
     this.draw();
 
     if(this.HP <= 0){
+      hero.HP = hero.maxHP;
       particles = 600;
       BossExplosion.volume = 1;
       BossExplosion.play();
@@ -71,24 +88,33 @@ function Asteroids(x, y, dx, dy, width, height, radie, drop){
       Sprites.splice(Sprites.indexOf(this), 1);
       Monster.splice(Monster.indexOf(this), 1);
     }
-    /*if(this.HP <= 0){
+    //this is the if-statement that decides what happens when the asteroid is
+    //destroyed.
 
-    }*/
+    if(this.x + this.width/2 < 0
+      || this.x - this.width/2 > window.innerWidth
+      || this.y - this.height/2 > window.innerHeight) {
+      Sprites.splice(Sprites.indexOf(this), 1);
+      Monster.splice(Monster.indexOf(this), 1);
+      //When the asteroid moves outside of the screen, it's spliced out of the array.
+    }
     var DeltaX = this.x - hero.x;
     var DeltaY = this.y - hero.y;
     if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < hero.radius){
         hero.takeDamage(this.damage);
     }
-    /*Sprites.splice(Sprites.indexOf(this), 1);
-    Monster.splice(Monster.indexOf(this), 1);*/
-    // Tar bort skott utanfor skarmen
-    /*if(this.x < 0 || this.x > window.innerWidth
-    || this.y < 0 || this.y > window.innerHeight) {
-      Sprites.splice(Sprites.indexOf(this), 1);//splicar ut elementet ur arrayen
-    }*/
-
+    //if the player is inside the asteroid, the hero takes damage equal to his HP
+    //for instant death.
   }
 }
+
+/*
+* This is the constructor for drawing the stars on the canvas (the background).
+* This.draw draws the stars, and this.update moves them downward on the screen.
+* When they move outside of the canvas, their y-value is reset to 0, however their
+* x-value is randomized, as to give the effect of encountering new stars and not
+* the old ones.
+*/
 
 function Stars(x, y, dx, dy, radie, color, glow) {
   this.x = x;
@@ -115,15 +141,11 @@ function Stars(x, y, dx, dy, radie, color, glow) {
     c.fill();
   }
 
-  /*this.pushO = function(a) {
-  for (var i = 0; i < this.historyX.length; i++) {
-    a.push(new Stars(this.historyX[i], this.historyY[i], this.dx, this.dy, this.radie, this.color, this.glow));
-  }
-}*/
-
-this.moveRelativeToMass = function() {
-    this.dy = (this.dy/this.radie)*20;
-    this.dx = (this.dx/this.radie)*20;
+//This function decides the explosion particles' speed depending on how large they are. Larger
+//stars move faster and smaller stars move slower, as to give a 3D effect.
+  this.moveRelativeToMass = function() {
+      this.dy = (this.dy/this.radie)*20;
+      this.dx = (this.dx/this.radie)*20;
   }
 
   this.fade = function() {
@@ -190,7 +212,7 @@ this.moveRelativeToMass = function() {
   }
 }
 
-
+//This function gives the stars random colors.
 function RandomfillStar(){
   var o = Math.round,
     r = Math.random(),
@@ -198,12 +220,16 @@ function RandomfillStar(){
   return 'rgba(' + o(r * s) + ',' + o(r * s) + ',' + o(r * s) + ',' + (r + 0.1).toFixed(1) + ')';
 }
 
+//this function works like moveRelativeToMass, and decides how fast the Stars in
+//the background move depending on their size.
 function moveRelativeToRadius(r, dy) {
   dy = (r*dy)/1.5;
   return dy;
   }
 
-var starArray = [];
+var starArray = []; //this is the array in which the stars are pushed
+
+//in this for-loop. 50 different stars are created and pushed into starArray.
 for (var i = 0; i < 50; i++) {
   var color = RandomfillStar();
   var radie = ((Math.random() * 2));
@@ -215,6 +241,7 @@ for (var i = 0; i < 50; i++) {
   starArray.push(new Stars(xC, yC, dxC, dyC, radie, color, glow));
 }
 
+//this function keeps the canvas updated. It is called in one of the loops in gamecore.js.
 function updateBackground() {
   for (var i = 0; i < starArray.length; i++) {
     starArray[i].update();
@@ -225,6 +252,8 @@ function updateBackground() {
   }
 }
 
+//this function clears the canvas every frame and redraws it after each update.
+//it is also called in gamecore.js.
 function drawBackground(){
   c.clearRect(0, 0, innerWidth, innerHeight);
 
@@ -237,6 +266,7 @@ function drawBackground(){
   }
 }
 
+//This function is used to draw healthbars for all damagable entities.
 function drawHealthBars(x, y, width, height, fraction, opacity) {
   if(opacity == undefined) opacity = 1;
   c.fillStyle = "red";
@@ -255,6 +285,12 @@ function plusOrMinus() {
 var explosionArray = [];
 
 var particles = 0;
+
+/*
+* This function is used to create the explosions when damagable entities are killed
+* or destroyed. It pushes the particles into the explosionArray and uses the stars
+* constructor to create the particles.
+*/
 function explosion(x, y) {
 
     for (var i = 0; i < particles; i++) {

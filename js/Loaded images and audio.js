@@ -6,6 +6,7 @@ var EnemyLaserBeamsSoundEffect;
 var Asteroid;
 var ReloadSound;
 var bossLaser;
+var hitsound;
 
 function preload(){
   LaserSoundEffect = document.getElementById("LaserSound");
@@ -21,7 +22,7 @@ function preload(){
   Asteroid = document.getElementById("Asteroid");
   ReloadSound = document.getElementById("reloadSound");
   bossLaser = document.getElementById("BossLaser");
-
+  hitsound = document.getElementById("HitSound");
 }
 
 var deadSoundArray = [

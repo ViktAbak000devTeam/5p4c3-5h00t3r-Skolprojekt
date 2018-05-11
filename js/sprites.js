@@ -84,7 +84,7 @@ function Fiender(x, y, type, dx, dy) {
        if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < hero.radius){
            hero.takeDamage(this.damage);
            Sprites.splice(Sprites.indexOf(this), 1);
-       }
+         }
        // Tar bort skott utanfor skarmen
        if(this.x < 0 || this.x > window.innerWidth
        || this.y < 0 || this.y > window.innerHeight) {
@@ -124,7 +124,7 @@ function Thonfors(x, y, dx, dy){
         2*this.radius,
         2*this.radius);
       c.globalAlpha = 1;*/
-    drawHealthBars(this.x-50, this.y-this.radius - 15, 100, 10, this.HP/this.maxHP);
+    drawHealthBars(this.x-100, this.y-this.radius - 15, 200, 20, this.HP/this.maxHP);
   }
   this.update = function(dt){
 
