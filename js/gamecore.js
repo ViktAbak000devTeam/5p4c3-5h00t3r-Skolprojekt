@@ -43,7 +43,7 @@ var EnemySpawner = function() {
   this.time = 0;
   this.spawnRate = 4;
   this.cooldown = 0;
-  this.score = 1900;
+  this.score = 0;
   this.level = 0;
   this.biss = false;
   this.enemies = [];
@@ -53,6 +53,9 @@ var EnemySpawner = function() {
     for(var i = 0; i < enemyTypes.length; i++) {
       if(enemyTypes[i].level <= this.level && !this.enemies.includes(i)) {
         this.enemies.push(i);
+      }
+      else if(enemyTypes[i].level > this.level && this.enemies.includes(i)) {
+        this.enemies.splice(this.enemies[i], this.enemies.length-1);
       }
     }
     var x = Math.random()*(canvas.width - 400);

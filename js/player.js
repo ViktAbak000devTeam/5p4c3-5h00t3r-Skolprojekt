@@ -117,12 +117,14 @@ hero.fire = function() {
   this.cooldown = 0.25; //when function is activated, cooldown is set to greater than 0 to cool down
   this.ammo -= 1;
   if(this.ammo <=0){
+    this.reload();
     this.ammoResetCooldown = this.ammoResetTime;
   }
 }
 
 hero.reload = function() {
   this.ammo = this.fullAmmo;
+  ReloadSound.play();
 }
 
 hero.takeDamage = function(dmg) {
@@ -148,8 +150,6 @@ function ensureBounds(sprite) {
     sprite.dy = 0;
   }
 }
-
-
 
 hero.Skott = function(x, y, dx, dy) {
   this.x = x;

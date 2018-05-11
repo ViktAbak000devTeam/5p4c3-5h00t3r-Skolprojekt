@@ -41,7 +41,7 @@ function Fiender(x, y, type, dx, dy) {
       particles = 200;
       explosion(this.x, this.y,((Math.random() * 5) + 1));
     }
-    
+
     this.cooldown-=dt;
     this.fire();
   }
@@ -109,21 +109,21 @@ function Thonfors(x, y, dx, dy){
   this.damage = 8;
   this.angle = 0;
   this.HP = this.maxHP;
-  var img = document.getElementById("Thonfors");//loada Bilder
+  var img = document.getElementById("BigWheel");//loada Bilder
   this.draw = function(){
     c.drawImage(img,
       Math.floor(this.x-this.radius),
       Math.floor(this.y-this.radius),
       2*this.radius,
       2*this.radius);
-      c.fillStyle = "red";
+      /*c.fillStyle = "red";
       c.globalAlpha = 1 - (this.HP/this.maxHP);
       c.fillRect(
         Math.floor(this.x-this.radius),
         Math.floor(this.y-this.radius),
         2*this.radius,
         2*this.radius);
-      c.globalAlpha = 1;
+      c.globalAlpha = 1;*/
     drawHealthBars(this.x-50, this.y-this.radius - 15, 100, 10, this.HP/this.maxHP);
   }
   this.update = function(dt){
@@ -166,6 +166,11 @@ function Thonfors(x, y, dx, dy){
     this.fire = function(){
       if(this.cooldown > 0) return;// cooldown > 0 => funktionen ej kan aktiveras
       var v = 1000;
+      if (!bossLaser.paused) {
+        bossLaser.currentTime = 0;
+      } else {
+        bossLaser.play(); //DETTA SPELAR UPP LJUD TILL LASERORKESTRALEN
+      }
       for(var angle = 0; angle < 2*Math.PI; angle += Math.PI/10) {
         var dx = -Math.cos(angle+this.angle);
         var dy = -Math.sin(angle+this.angle);
