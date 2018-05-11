@@ -185,7 +185,7 @@ this.moveRelativeToMass = function() {
     if (controller.up == true && controller.down == true) {
       this.dy = this.dySave;
     }
-    this.x += this.dx + hero.dx/1000;
+    this.x += this.dx - hero.dx/1000;
     this.y += this.dy;
   }
 }
