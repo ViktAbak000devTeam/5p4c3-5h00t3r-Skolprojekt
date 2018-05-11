@@ -14,14 +14,14 @@ function pad(n, width, z) {
 * player's HP-bar and the crosshair of the mouse.
 */
 function drawUI(){
-  c.font = "30px Arcade";
-  c.fillStyle = "white";
+  c.font = "bold 25px Lucida Console, Monaco, monospace";
+  c.fillStyle = "rgb(255, 184, 0)";
   c.fillText(pad(hero.score, 6),canvas.width - 150,canvas.height-30);
   //draws the scoremeter
 
   c.beginPath();
-  c.font = "30px Arcade";
-  c.fillStyle = "white";
+  c.font = "bold 25px Lucida Console, Monaco, monospace";
+  c.fillStyle = "rgb(255, 184, 0)";
   c.fillText(pad("Ammo: " + hero.ammo + "/" + hero.fullAmmo, 2),canvas.width - 400,canvas.height-30);
   //draws the ammo-meter
 
