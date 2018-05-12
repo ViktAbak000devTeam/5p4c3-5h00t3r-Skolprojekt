@@ -7,6 +7,10 @@ var Asteroid;
 var ReloadSound;
 var bossLaser;
 var hitsound;
+var beam2;
+var beam3;
+var beam4;
+var beam5;
 
 function preload(){
   LaserSoundEffect = document.getElementById("LaserSound");
@@ -23,6 +27,10 @@ function preload(){
   ReloadSound = document.getElementById("reloadSound");
   bossLaser = document.getElementById("BossLaser");
   hitsound = document.getElementById("HitSound");
+  beam2 = document.getElementById("skott2");
+  beam3 = document.getElementById("skott3");
+  beam4 = document.getElementById("skott4");
+  beam5 = document.getElementById("skott5");
 }
 
 var deadSoundArray = [

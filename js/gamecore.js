@@ -13,21 +13,24 @@ var enemyTypes = [
     attackInterval: 0.8,
     imageID: "Enemyship",
     damage: 5,
-    level: 0
+    level: 0,
+    bulletimg: "fiendeskott"
   },
   {
     maxHP: 75,
     attackInterval: 0.6,
     imageID: "Enemyship2",
     damage: 5,
-    level: 3
+    level: 3,
+    bulletimg: "skott5"
   },
   {
     maxHP: 100,
     attackInterval: 0.3,
     imageID: "Enemyship3",
     damage: 1,
-    level: 7
+    level: 7,
+    bulletimg: "skott3"
   }
 ];
 

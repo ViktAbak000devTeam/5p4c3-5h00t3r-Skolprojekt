@@ -18,6 +18,7 @@ function Fiender(x, y, type, dx, dy) {
   this.cooldown = 0;
   this.angle = 0;
   var img = document.getElementById(this.type.imageID);
+  var bullet = document.getElementById(this.type.bulletimg);
   this.radius = img.width/9;
   this.draw = function(){
     c.drawImage(img,
@@ -66,11 +67,10 @@ function Fiender(x, y, type, dx, dy) {
      this.dy = dy;
      this.damage = damage;
      this.angle = Math.atan2(-dy, -dx);
-     var img = document.getElementById("fiendeskott");
      this.draw = function() {
        c.translate(this.x, this.y);
        c.rotate(this.angle - Math.PI/2);
-       c.drawImage(img,-30,-30,60,60);
+       c.drawImage(bullet,-30,-30,60,60);
        c.rotate(-this.angle + Math.PI/2);
        c.translate(-this.x, -this.y);
      }
