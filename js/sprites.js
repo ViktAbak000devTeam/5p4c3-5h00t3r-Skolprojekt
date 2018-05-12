@@ -17,7 +17,6 @@ function Fiender(x, y, type, dx, dy) {
   this.HP = this.type.maxHP;
   this.cooldown = 0;
   this.angle = 0;
-  //this.sprite = Math.floor(Math.random()*EnemySprites.length);
   var img = document.getElementById(this.type.imageID);
   this.radius = img.width/9;
   this.draw = function(){
@@ -49,7 +48,7 @@ function Fiender(x, y, type, dx, dy) {
     this.HP -= damage;
   }
   this.fire = function(){
-    if(this.cooldown > 0) return;// cooldown > 0 => funktionen ej kan aktiveras
+    if(this.cooldown > 0) return;// cooldown > 0 => funktion cannot activate
     var v = 1000;
     console.log(this.x);
     var dx = -Math.cos(this.angle);
@@ -58,7 +57,8 @@ function Fiender(x, y, type, dx, dy) {
     this.cooldown = this.type.attackInterval; //when function is activated, cooldown is set to greater than 0 to cool down
    }
 
-   // Fiendens skott
+   // Enemy bullet constructor. Works exactly like hero.skott, however with minor
+   //adjustments.
    this.Skott = function(x,y,dx,dy,damage) {
      this.x = x;
      this.y = y;
@@ -68,27 +68,27 @@ function Fiender(x, y, type, dx, dy) {
      this.angle = Math.atan2(-dy, -dx);
      var img = document.getElementById("fiendeskott");
      this.draw = function() {
-       c.translate(this.x, this.y);//flyttar skotten till this.x, this.y
-       c.rotate(this.angle - Math.PI/2);//roterar skottet efter musens position
+       c.translate(this.x, this.y);
+       c.rotate(this.angle - Math.PI/2);
        c.drawImage(img,-30,-30,60,60);
-       c.rotate(-this.angle + Math.PI/2);//tillater att skottet roterar at andra hallet
-       c.translate(-this.x, -this.y);//tillater en tillbakaflyttning
+       c.rotate(-this.angle + Math.PI/2);
+       c.translate(-this.x, -this.y);
      }
 
      this.update = function(dt) {
        this.x += this.dx*dt;
        this.y += this.dy*dt;
-       // Testa kollision
+       //Tests collision
        var DeltaX = this.x - hero.x;
        var DeltaY = this.y - hero.y;
        if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < hero.radius){
            hero.takeDamage(this.damage);
            Sprites.splice(Sprites.indexOf(this), 1);
          }
-       // Tar bort skott utanfor skarmen
+       // removes bullets from screen when outside of canvas.
        if(this.x < 0 || this.x > window.innerWidth
        || this.y < 0 || this.y > window.innerHeight) {
-         Sprites.splice(Sprites.indexOf(this), 1);//splicar ut elementet ur arrayen
+         Sprites.splice(Sprites.indexOf(this), 1);
        }
     }
   }
@@ -109,21 +109,13 @@ function Thonfors(x, y, dx, dy){
   this.damage = 8;
   this.angle = 0;
   this.HP = this.maxHP;
-  var img = document.getElementById("BigWheel");//loada Bilder
+  var img = document.getElementById("BigWheel");//loads bossimage
   this.draw = function(){
     c.drawImage(img,
       Math.floor(this.x-this.radius),
       Math.floor(this.y-this.radius),
       2*this.radius,
       2*this.radius);
-      /*c.fillStyle = "red";
-      c.globalAlpha = 1 - (this.HP/this.maxHP);
-      c.fillRect(
-        Math.floor(this.x-this.radius),
-        Math.floor(this.y-this.radius),
-        2*this.radius,
-        2*this.radius);
-      c.globalAlpha = 1;*/
     drawHealthBars(this.x-100, this.y-this.radius - 15, 200, 20, this.HP/this.maxHP);
   }
   this.update = function(dt){
@@ -164,12 +156,12 @@ function Thonfors(x, y, dx, dy){
       this.HP -= dmg;
     }
     this.fire = function(){
-      if(this.cooldown > 0) return;// cooldown > 0 => funktionen ej kan aktiveras
+      if(this.cooldown > 0) return;// cooldown > 0 => function cannot activate
       var v = 1000;
       if (!bossLaser.paused) {
         bossLaser.currentTime = 0;
       } else {
-        bossLaser.play(); //DETTA SPELAR UPP LJUD TILL LASERORKESTRALEN
+        bossLaser.play();
       }
       for(var angle = 0; angle < 2*Math.PI; angle += Math.PI/10) {
         var dx = -Math.cos(angle+this.angle);
@@ -187,27 +179,25 @@ function Thonfors(x, y, dx, dy){
       this.angle = Math.atan2(-dy, -dx);
       var img = document.getElementById("fiendeskott");
       this.draw = function() {
-        c.translate(this.x, this.y);//flyttar skotten till this.x, this.y
-        c.rotate(this.angle - Math.PI/2);//roterar skottet efter musens position
+        c.translate(this.x, this.y);
+        c.rotate(this.angle - Math.PI/2);
         c.drawImage(img,-50,-50,100,100);
-        c.rotate(-this.angle + Math.PI/2);//tillater att skottet roterar at andra hallet
-        c.translate(-this.x, -this.y);//tillater en tillbakaflyttning
+        c.rotate(-this.angle + Math.PI/2);
+        c.translate(-this.x, -this.y);
       }
 
       this.update = function(dt) {
         this.x += this.dx*dt;
         this.y += this.dy*dt;
-        // Testa kollision
         var DeltaX = this.x - hero.x;
         var DeltaY = this.y - hero.y;
         if(Math.sqrt(DeltaX*DeltaX + DeltaY*DeltaY) < hero.radius){
           hero.takeDamage(this.damage);
           Sprites.splice(Sprites.indexOf(this), 1);
         }
-        // Tar bort skott utanfor skarmen
         if(this.x < 0 || this.x > window.innerWidth
           || this.y < 0 || this.y > window.innerHeight) {
-          Sprites.splice(Sprites.indexOf(this), 1);//splicar ut elementet ur arrayen
+          Sprites.splice(Sprites.indexOf(this), 1);
         }
       }
     }

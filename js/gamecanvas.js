@@ -266,7 +266,7 @@ function drawBackground(){
   }
 }
 
-//This function is used to draw healthbars for all damagable entities.
+//This constructor is used to draw healthbars for all damagable entities.
 function drawHealthBars(x, y, width, height, fraction, opacity) {
   if(opacity == undefined) opacity = 1;
   c.fillStyle = "red";

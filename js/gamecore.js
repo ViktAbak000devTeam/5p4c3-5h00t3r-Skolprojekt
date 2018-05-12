@@ -1,6 +1,6 @@
 
 //BossAtLevel decides which level the boss will spawn at.
-var bossAtLevel = 5;
+var bossAtLevel = 0;
 
 /*
 * this array contains the different enemytypes that can spawn. The "level" attribute is what determines when
@@ -59,6 +59,7 @@ var EnemySpawner = function() {
         this.enemies.push(i);
       }
       else if(enemyTypes[i].level > this.level && this.enemies.includes(i)) {
+        this.level = 0;
         this.enemies.splice(this.enemies[i], this.enemies.length-1);
       }
       /*
@@ -191,10 +192,10 @@ function drawSprites() {
 function init(){
   preload();
   loadKeys();
+  bossAtLevel = 5;
   LaserSoundEffect.volume = 0.2;
   bossmusic1.volume = 0.5;
   boom.volume = 0.15;
-  //LargeChrash.volume = 0.3;
   chrash3.volume = 0.2;
   Sprites.push(hero);
   mouse.x = canvas.width/2;
