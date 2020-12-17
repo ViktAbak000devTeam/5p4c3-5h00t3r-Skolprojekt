@@ -22,6 +22,8 @@ hero.fullAmmo = 15;
 hero.ammo = hero.fullAmmo;
 hero.ammoResetTime = 2; //necessary for reload to work
 hero.ammoResetCooldown = 0; //necessary for reload to work, makes it so that you can't shoot immideately
+hero.upgrade = false;
+hero.upgradeAmount = 90;
 
 hero.draw = function() {
   c.translate(hero.x, hero.y);
@@ -140,13 +142,25 @@ hero.fire = function() {
   }
 
   Sprites.push(new this.Skott(this.x + dx * this.h / 2, this.y + dy * this.h / 2, dx * v, dy * v));
+
+  if(hero.upgrade) { //an additional upgrade for the player
+    for(var angle = -Math.PI/20; angle <= Math.PI/20; angle += 2*(Math.PI/20)) {
+      var dx = -Math.cos(angle+this.angle);
+      var dy = -Math.sin(angle+this.angle);
+      Sprites.push(new this.Skott(this.x+dx*this.radius, this.y+dy*this.radius, dx*v, dy*v, this.damage)); //pushes a shot at the given angle (in radians)
+    }
+    this.upgradeAmount--;
+  }
+
   this.cooldown = 0.25; //when function is activated, cooldown is set to greater than 0 to cool down
   this.ammo -= 1;
+
   if(this.ammo <=0){
     this.reload();
     this.ammoResetCooldown = this.ammoResetTime;
   }
 }
+
 
 //this function reloads hero.ammo
 hero.reload = function() {
@@ -163,7 +177,6 @@ hero.takeDamage = function(dmg) {
     hitsound.play();
   }
 }
-
 
 /*
 * This function ensures that the hero does not move outside of the canvas. This is
@@ -233,6 +246,8 @@ hero.Skott = function(x, y, dx, dy) {
       var DeltaY = this.y - boss.y;
       if (Math.sqrt(DeltaX * DeltaX + DeltaY * DeltaY) < boss.radius) {
         boss.applyDamage(25);
+        particles = 5;
+        explosion(boss.x, boss.y);
         Sprites.splice(Sprites.indexOf(this), 1);
         if (boss.HP <= 0) {
           hero.score += boss.score;

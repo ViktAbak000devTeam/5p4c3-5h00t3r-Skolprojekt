@@ -80,8 +80,7 @@ function Asteroids(x, y, dx, dy, width, height, radie, drop){
     if(this.HP <= 0){
       hero.HP = hero.maxHP;
       particles = 600;
-      BossExplosion.volume = 1;
-      BossExplosion.play();
+      asteroidExplosion.play();
       explosion(this.x+20, this.y+20);
       explosion(this.x-20, this.y-20);
       explosion(this.x, this.y);
@@ -126,8 +125,6 @@ function Stars(x, y, dx, dy, radie, color, glow) {
   this.radie = radie;
   this.color = color;
   this.glow = glow;
-  this.historyX = [];
-  this.historyY = [];
   this.minsk = 1;
 
   this.draw = function() {
@@ -147,7 +144,12 @@ function Stars(x, y, dx, dy, radie, color, glow) {
       this.dy = (this.dy/this.radie)*20;
       this.dx = (this.dx/this.radie)*20;
   }
-
+  /*
+  * The "fade function" lowers the "a" for each particles "rgba-value" to create a fading effect.
+  * The function works very similar to the "Kaprekar-challange" since it converts the rgba-value to a string
+  * and stores it in an array, looks throught that array, and inserts a lower "a-value". Eventually the particles are removed
+  * since it is very loading for the CPU to handle that many canvas objects.
+  */
   this.fade = function() {
     this.color = this.color.toString("");
     var start = this.color.lastIndexOf(", ");
@@ -165,19 +167,11 @@ function Stars(x, y, dx, dy, radie, color, glow) {
     }
   }
 
-  this.accelerate = function() {
+  this.accelerate = function() {//deaccelerates the particles from the explosion
     this.dx = this.dx*0.9;
     this.dy = this.dy*0.9;
     this.x += this.dx + hero.dx/1000;
     this.y += this.dy;
-
-    this.historyX.push(this.x);
-    this.historyY.push(this.y);
-
-    if (this.historyX.length > 20) {
-      this.historyX.splice(0, 1);
-      this.historyY.splice(0, 1);
-    }
   }
 
   this.update = function() {
@@ -195,7 +189,7 @@ function Stars(x, y, dx, dy, radie, color, glow) {
       this.dy = this.dy*1.01;
       }
     }
-    else if (controller.down == true){
+    else if (controller.down == true || controller.paused == true){
       if (this.dy >= this.dySave/1.7) {
       this.dy = this.dy*0.99;
       }
@@ -245,6 +239,7 @@ for (var i = 0; i < 50; i++) {
 function updateBackground() {
   for (var i = 0; i < starArray.length; i++) {
     starArray[i].update();
+
     if(i < explosionArray.length) {
     explosionArray[i].accelerate();
     explosionArray[i].fade();
@@ -259,6 +254,7 @@ function drawBackground(){
 
   for (var i = 0; i < starArray.length; i++) {
     starArray[i].draw();
+
     if(i < explosionArray.length) {
     explosionArray[i].draw();
     explosionArray[i].fade();
@@ -286,6 +282,7 @@ var explosionArray = [];
 
 var particles = 0;
 
+
 /*
 * This function is used to create the explosions when damagable entities are killed
 * or destroyed. It pushes the particles into the explosionArray and uses the stars
@@ -296,6 +293,10 @@ function explosion(x, y) {
     for (var i = 0; i < particles; i++) {
     var radie = ((Math.random() * 5) + 1);
     var color;
+    /*
+    * The color of the explosion-particle is dependant on the radius since smaller particles will
+    * travel faster and be darker in color
+    */
     if(radie > 4) {
       color = explosionColor1[Math.floor(Math.random() * explosionColor1.length)];
     }
@@ -306,10 +307,10 @@ function explosion(x, y) {
       color = explosionColor3[Math.floor(Math.random() * explosionColor3.length)];
     }
     var glow = color;
-    var dxC = plusOrMinus()*Math.random();
+    var dxC = plusOrMinus()*Math.random();//the velocity is randomized but the vector is still 1 to create the explosion effect
     var dyC = plusOrMinus()*Math.sqrt(1 - Math.pow(dxC, 2));
-    explosionArray.push(new Stars(x, y, dxC, dyC, radie, color, glow));
-    explosionArray[i].moveRelativeToMass();
+    explosionArray.push(new Stars(x, y, dxC, dyC, radie, color, glow));//pushes new "stars" or particles into the array
+    explosionArray[i].moveRelativeToMass();//the particles acceliration is dependant by thier mass
     exploded = true;
   }
 }

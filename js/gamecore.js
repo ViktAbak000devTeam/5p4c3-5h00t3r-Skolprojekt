@@ -1,7 +1,7 @@
 
 //BossAtLevel decides which level the boss will spawn at.
-var bossAtLevel = 0;
-
+var boss = undefined; //this variable is essential for the boss spawning in
+var bossAtLevel = 5;
 /*
 * this array contains the different enemytypes that can spawn. The "level" attribute is what determines when
 * the specific type can spawn. "level" relies on the "score"-variable.
@@ -22,7 +22,7 @@ var enemyTypes = [
     imageID: "Enemyship2",
     damage: 5,
     level: 3,
-    bulletimg: "skott5"
+    bulletimg: "fiendeskott"
   },
   {
     maxHP: 100,
@@ -30,13 +30,10 @@ var enemyTypes = [
     imageID: "Enemyship3",
     damage: 1,
     level: 7,
-    bulletimg: "skott3"
+    bulletimg: "fiendeskott"
   }
 ];
 
-
-
-var boss = undefined; //this variable is essential for the boss spawning in
 
 /*
 * This function is responsible for spawning the enemies. It has a cooldown which
@@ -55,10 +52,10 @@ var EnemySpawner = function() {
   this.biss = false;
   this.enemies = [];
   this.tick = function(dt) {
-    this.level = Math.floor(this.score/400);
-    this.spawnRate = (4*Math.pow(0.96, this.level));
+    this.level = Math.floor(this.score/400);//the level is based on the score
+    this.spawnRate = (4*Math.pow(0.96, this.level));//he spawnrate increases exponatioally and gets harder as the game progresses.
     for(var i = 0; i < enemyTypes.length; i++) {
-      if(enemyTypes[i].level <= this.level && !this.enemies.includes(i)) {
+      if(enemyTypes[i].level <= this.level && !this.enemies.includes(i)) {//pushes new types of enemies into the enemy-array as the level increases
         this.enemies.push(i);
       }
       else if(enemyTypes[i].level > this.level && this.enemies.includes(i)) {
@@ -72,18 +69,21 @@ var EnemySpawner = function() {
       */
     }
 
-
     //This segment of the function is dedicated to spawning the boss.
 
     var x = Math.random()*(canvas.width - 400);
 
-
-
-    if(this.level == bossAtLevel && !this.biss) {
+    if(this.level >= bossAtLevel && !this.biss) {
       this.biss = true;
       music.pause();
       bossmusic1.play();
-      boss = new Thonfors(x, -100, 60, 100);
+
+      if (Math.random() >= 0.5){
+        boss = new LaserBeamBoss(x, -100, 80, 120);
+      } else {
+        boss = new Thonfors(x, -100, 60, 100);
+      }
+
       Sprites.push(boss);
       bossAtLevel+=10;
     }
@@ -96,13 +96,31 @@ var EnemySpawner = function() {
       bossmusic1.pause();
       music.play();
       boss = undefined;
+      bossExplosion.volume = 1;
+
+      bossExplosion.addEventListener('ended', function(){
+        Powerup.play();
+        hero.ammoResetCooldown = hero.ammoResetTime;
+        hero.reload();
+        hero.upgrade = true;
+      });
+
+      bossExplosion.play();
     }
     //this if-statement decides what happens when the boss dies
 
     if(this.biss && hero.HP <= 0){
       boss = undefined;
+      LaserBossBeam.currentTime = 0;
       this.biss = false;
       gameOver();
+    }
+
+    if(hero.upgradeAmount <= 0){
+      Powerdown.play();
+      hero.ammoResetCooldown = hero.ammoResetTime;
+      hero.upgrade = false;
+      hero.upgradeAmount = 90;
     }
     //this if-statement is essential for when the player dies during a boss-fight
 
@@ -197,6 +215,11 @@ function init(){
   loadKeys();
   bossAtLevel = 5;
   LaserSoundEffect.volume = 0.2;
+  Powerup.volume = 0.5;
+  BossCanon.volume = 0.5;
+  asteroidExplosion.volume = 0.5;
+  LaserBossBeam.volume = 0.6;
+  Powerdown.volume = 0.8;
   bossmusic1.volume = 0.5;
   boom.volume = 0.15;
   chrash3.volume = 0.2;
@@ -211,6 +234,7 @@ function init(){
   music.currentTime = 0;
   setPaused(false);
   music.loop = true;
+  pausemusic.loop = true;
   window.requestAnimationFrame(loop);
 }
 
@@ -225,13 +249,20 @@ function setPaused(v) {
     music.pause();
     pausemusic.play();
     bossmusic1.pause();
-    pausemusic.volume = 0.0;
+    LaserBossBeam.pause();
+    if(explodeEars) {
+      pausemusic.volume = 1;
+    } else {
+    pausemusic.volume = 0.35;
+  }
     document.body.className = "paused";
   }
   else {
     pausemusic.pause();
+    pausemusic.currentTime = 0;
     if(boss != undefined){
       bossmusic1.play();
+      LaserBossBeam.play();
       document.body.className = "";
     }
     else{
@@ -248,14 +279,14 @@ function setPaused(v) {
 */
 function gameOver() {
   controller.playing = false;
+  hero.upgrade = false;
   ESCAPE_KEY = undefined;
   backgroundLoop();
   Sprites.splice(0, Sprites.length);
   Monster.splice(0, Monster.length);
   music.pause();
   bossmusic1.pause();
-  BossExplosion.volume = 0.5;
-  BossExplosion.play();
+  LaserBossBeam.pause();
   GameOver.volume = 0.9;
   GameOver.play();
   document.body.className = "gameover";
